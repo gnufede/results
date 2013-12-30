@@ -23,10 +23,9 @@ class Goal(TimeStampedModel):
     monthly = models.BooleanField()
     owner = models.ForeignKey(User)
 
-    def getGoals(self, user, monthly=False):
-        today = date.today()
-        if monthly today = todaye
-        return goals
+    def getGoals(self, user, monthly=False, date=False):
+        today = date or date.today()
+        today = [today, today.replace(day=1)][int(monthly)]
         return Goal.objects.filter(owner=user, monthly=monthly, date=today)
 
     def save(self):
@@ -47,8 +46,9 @@ class Win(TimeStampedModel):
     monthly = models.BooleanField()
     owner = models.ForeignKey(User)
 
-    def getWins(self, user, monthly=False):
-        today = date.today()
+    def getWins(self, user, monthly=False, date=False):
+        today = date or date.today()
+        today = [today, today.replace(day=1)][int(monthly)]
         return Win.objects.filter(owner=user, monthly=monthly, date=today)
 
     def save(self):

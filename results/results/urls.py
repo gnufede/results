@@ -8,9 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='base.html')),
 
-    urlpatterns = patterns('',
-        url(r'^', include('goals.urls')),
-    )
+    url(r'^', include('goals.urls')),
     # Examples:
     # url(r'^$', 'results.views.home', name='home'),
     # url(r'^results/', include('results.foo.urls')),
