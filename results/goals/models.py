@@ -20,16 +20,20 @@ class Goal(TimeStampedModel):
     parent = models.ForeignKey('Goal', related_name="%(app_label)s_%(class)s",
               blank=True, null=True)
     tags = models.ManyToManyField(Category)
-    monthly = models.BooleanField()
+    weekly = models.BooleanField()
     owner = models.ForeignKey(User)
 
-    def getGoals(self, user, monthly=False, date=False):
-        today = date or date.today()
-        today = [today, today.replace(day=1)][int(monthly)]
-        return Goal.objects.filter(owner=user, monthly=monthly, date=today)
+    def getGoals(user, weekly=False, day=False):
+        today = day or date.today()
+        sunday = date.fromordinal(today.toordinal()-today.isoweekday())
+        today = [today, sunday][int(weekly)]
+        if user:
+            return Goal.objects.filter(owner=user, weekly=weekly, date=today)
+        else:
+            return []
 
     def save(self):
-        if len(self.getGoals(self.owner, monthly=self.monthly)) > 2:
+        if len(self.getGoals(self.owner, weekly=self.weekly)) > 2:
             #TODO: raise errors here
             pass
         else:
@@ -43,16 +47,17 @@ class Win(TimeStampedModel):
     goal = models.ForeignKey('Goal', related_name='wins', blank=True,
             null=True)
     tags = models.ManyToManyField('Category')
-    monthly = models.BooleanField()
+    weekly = models.BooleanField()
     owner = models.ForeignKey(User)
 
-    def getWins(self, user, monthly=False, date=False):
-        today = date or date.today()
-        today = [today, today.replace(day=1)][int(monthly)]
-        return Win.objects.filter(owner=user, monthly=monthly, date=today)
+    def getWins(user, weekly=False, day=False):
+        today = day or date.today()
+        sunday = date.fromordinal((today.toordinal()-today.isoweekday())+5)
+        today = [today, sunday][int(weekly)]
+        return Win.objects.filter(owner=user, weekly=weekly, date=today)
 
     def save(self):
-        if len(self.getWins(self.owner, monthly=self.monthly)) > 2:
+        if len(self.getWins(self.owner, weekly=self.weekly)) > 2:
             #TODO: raise errors here
             pass
         else:
