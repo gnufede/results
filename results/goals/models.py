@@ -20,23 +20,27 @@ class Goal(TimeStampedModel):
     parent = models.ForeignKey('Goal', related_name="%(app_label)s_%(class)s",
               blank=True, null=True)
     tags = models.ManyToManyField(Category)
-    weekly = models.BooleanField()
+    weekly = models.BooleanField(default=False)
     owner = models.ForeignKey(User)
 
     def getGoals(user, weekly=False, day=False):
         today = day or date.today()
         sunday = date.fromordinal(today.toordinal()-today.isoweekday())
-        today = [today, sunday][int(weekly)]
+        today = [today, sunday][int(weekly or 0)]
         if user:
             return Goal.objects.filter(owner=user, weekly=weekly, date=today)
         else:
             return []
 
     def save(self):
-        if len(self.getGoals(self.owner, weekly=self.weekly)) > 2:
+        if len(Goal.getGoals(user=self.owner, weekly=self.weekly)) > 2:
             #TODO: raise errors here
             pass
         else:
+            if self.weekly:
+                sunday = date.fromordinal(self.date.toordinal()-
+                                        self.date.isoweekday())
+                self.date = sunday
             super(Goal,self).save()
 
 
