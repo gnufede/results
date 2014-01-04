@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from goals.models import Category, Goal
-from goals.serializers import CategorySerializer, GoalSerializer
+from goals.models import Category, Goal, Win
+from goals.serializers import CategorySerializer, GoalSerializer, WinSerializer
 from django.contrib.auth.models import User
 
 class JSONResponse(HttpResponse):
@@ -38,6 +38,32 @@ def category_list(request):
         return JSONResponse(serializer.errors, status=400)
 
 @csrf_exempt
+def win_list(request):
+    """
+    List current wins.
+    """
+    if request.method == 'GET':
+        user = User.objects.get(username=str(request.user))
+        wins = Win.getWins(user=user)
+        serializer = WinSerializer(wins, many=True)
+        return JSONResponse(serializer.data)
+
+
+@csrf_exempt
+def win_new(request):
+    """
+    Create new win.
+    """
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = WinSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JSONResponse(serializer.data, status=201)
+        return JSONResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
 def goal_list(request):
     """
     List current goals.
@@ -55,14 +81,10 @@ def goal_new(request):
     Create new goal.
     """
     if request.method == 'POST':
-        #user = User.objects.get(username=str(request.user))
         data = JSONParser().parse(request)
-        #data['owner'] = user
         serializer = GoalSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-#            goal = Goal.objects.filter(owner=request.user)
-#            serializer = GoalSerializer(goal, many=False)
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
 

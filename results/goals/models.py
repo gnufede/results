@@ -23,6 +23,12 @@ class Goal(TimeStampedModel):
     weekly = models.BooleanField(default=False)
     owner = models.ForeignKey(User)
 
+    def __unicode__(self):
+        return ', '.join((str(self.owner), self.title, str(self.date), str(self.weekly)))
+
+    def __str__(self):
+        return self.__unicode__()
+
     def getGoals(user, weekly=False, day=False):
         today = day or date.today()
         sunday = date.fromordinal(today.toordinal()-today.isoweekday())
@@ -51,19 +57,23 @@ class Win(TimeStampedModel):
     goal = models.ForeignKey('Goal', related_name='wins', blank=True,
             null=True)
     tags = models.ManyToManyField('Category')
-    weekly = models.BooleanField()
+    weekly = models.BooleanField(default=False)
     owner = models.ForeignKey(User)
 
     def getWins(user, weekly=False, day=False):
         today = day or date.today()
-        sunday = date.fromordinal((today.toordinal()-today.isoweekday())+5)
-        today = [today, sunday][int(weekly)]
+        friday = date.fromordinal((today.toordinal()-today.isoweekday())+5)
+        today = [today, friday][int(weekly or 0)]
         return Win.objects.filter(owner=user, weekly=weekly, date=today)
 
     def save(self):
-        if len(self.getWins(self.owner, weekly=self.weekly)) > 2:
+        if len(Win.getWins(user=self.owner, weekly=self.weekly)) > 2:
             #TODO: raise errors here
             pass
         else:
+            if self.weekly:
+                friday = date.fromordinal((self.date.toordinal()-
+                                        self.date.isoweekday())+5)
+                self.date = friday
             super(Win,self).save()
 
