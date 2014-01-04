@@ -48,3 +48,21 @@ def goal_list(request):
         serializer = GoalSerializer(goals, many=True)
         return JSONResponse(serializer.data)
 
+
+@csrf_exempt
+def goal_new(request):
+    """
+    Create new goal.
+    """
+    if request.method == 'POST':
+        #user = User.objects.get(username=str(request.user))
+        data = JSONParser().parse(request)
+        #data['owner'] = user
+        serializer = GoalSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+#            goal = Goal.objects.filter(owner=request.user)
+#            serializer = GoalSerializer(goal, many=False)
+            return JSONResponse(serializer.data, status=201)
+        return JSONResponse(serializer.errors, status=400)
+
