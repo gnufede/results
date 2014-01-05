@@ -45,7 +45,7 @@ def win_list(request):
     List current wins.
     """
     if request.method == 'GET':
-        user = User.objects.get(username=str(request.user))
+        user = request.user.id
         wins = Win.getWins(user=user)
         serializer = WinSerializer(wins, many=True)
         return JSONResponse(serializer.data)
@@ -58,6 +58,8 @@ def win_new(request):
     """
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        data['owner'] = request.user.id
+        data['date'] = date.today().isoformat()
         serializer = WinSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -71,7 +73,7 @@ def goal_list(request):
     List current goals.
     """
     if request.method == 'GET':
-        user = User.objects.get(username=str(request.user))
+        user = request.user.id
         goals = Goal.getGoals(user=user)
         serializer = GoalSerializer(goals, many=True)
         return JSONResponse(serializer.data)
