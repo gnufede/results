@@ -24,7 +24,8 @@ class Goal(TimeStampedModel):
     owner = models.ForeignKey(User)
 
     def __unicode__(self):
-        return ', '.join((str(self.owner), self.title, str(self.date), str(self.weekly)))
+        return ', '.join((str(x) for x in
+                (self.owner, self.title, self.date, self.weekly)))
 
     def __str__(self):
         return self.__unicode__()
@@ -59,6 +60,13 @@ class Win(TimeStampedModel):
     tags = models.ManyToManyField('Category')
     weekly = models.BooleanField(default=False)
     owner = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return ', '.join((str(x) for x in
+                (self.owner, self.title, self.date, self.weekly)))
+
+    def __str__(self):
+        return self.__unicode__()
 
     def getWins(user, weekly=False, day=False):
         today = day or date.today()
