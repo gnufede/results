@@ -68,13 +68,13 @@ def win_new(request):
 
 
 @csrf_exempt
-def goal_list(request):
+def goal_list(request, weekly=False):
     """
     List current goals.
     """
     if request.method == 'GET':
         user = request.user.id
-        goals = Goal.getGoals(user=user)
+        goals = Goal.getGoals(user=user, weekly=weekly)
         serializer = GoalSerializer(goals, many=True)
         return JSONResponse(serializer.data)
 
