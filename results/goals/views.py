@@ -9,6 +9,8 @@ from goals.models import Category, Goal, Win
 from goals.serializers import CategorySerializer, GoalSerializer, WinSerializer
 from django.contrib.auth.models import User
 
+from datetime import date
+
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
@@ -82,6 +84,8 @@ def goal_new(request):
     """
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        data['owner'] = request.user.id
+        data['date'] = date.today().isoformat()
         serializer = GoalSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
