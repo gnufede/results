@@ -33,6 +33,7 @@ def category_list(request):
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        data['owner'] = request.user.id
         serializer = CategorySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -40,21 +41,38 @@ def category_list(request):
         return JSONResponse(serializer.errors, status=400)
 
 @csrf_exempt
-def win_list(request):
+def win_list(request, weekly=False):
     """
     List current wins.
     """
     if request.method == 'GET':
         user = request.user.id
-        wins = Win.getWins(user=user)
+        wins = Win.getWins(user=user, weekly=weekly)
         serializer = WinSerializer(wins, many=True)
         return JSONResponse(serializer.data)
 
 
 @csrf_exempt
+def win_tag(request):
+    """
+    Tag win.
+    """
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        win = Win.objects.get(pk=int(data['win']))
+        category = Category.objects.get(pk=int(data['category']))
+        if win.owner.id == request.user.id == category.owner.id:
+            win.tags.add(category)
+            win.save()
+            serializer = WinSerializer(win, many=False)
+            return JSONResponse(serializer.data, status=201)
+        return JSONResponse(win.errors, status=400)
+
+
+@csrf_exempt
 def win_new(request):
     """
-    Create new win.
+    New win.
     """
     if request.method == 'POST':
         data = JSONParser().parse(request)
@@ -65,6 +83,21 @@ def win_new(request):
             serializer.save()
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
+def win_update(request):
+    """
+    Update win.
+    """
+    if request.method == 'PUT':
+        data = JSONParser().parse(request)
+        if data['owner'] == request.user.id:
+            serializer = WinSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return JSONResponse(serializer.data, status=201)
+            return JSONResponse(serializer.errors, status=400)
 
 
 @csrf_exempt
@@ -93,4 +126,20 @@ def goal_new(request):
             serializer.save()
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def goal_tag(request):
+    """
+    Tag goal.
+    """
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        goal = Goal.objects.get(pk=int(data['goal']))
+        category = Category.objects.get(pk=int(data['category']))
+        if goal.owner.id == request.user.id == category.owner.id:
+            goal.tags.add(category)
+            goal.save()
+            serializer = GoalSerializer(goal, many=False)
+            return JSONResponse(serializer.data, status=201)
+        return JSONResponse(goal.errors, status=400)
 
