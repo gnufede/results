@@ -34,7 +34,7 @@ def category_list(request):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        serializer = CategorySerializer(data=data)
+        serializer = CategorySerializer(data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
@@ -79,10 +79,10 @@ def win_new(request):
         data['owner'] = request.user.id
         if 'id' in data:
             win = Win.objects.get(pk=data['id'])
-            serializer = WinSerializer(win,data=data)
+            serializer = WinSerializer(win, data=data, partial=True)
         else:
             data['date'] = date.today().isoformat()
-            serializer = WinSerializer(data=data)
+            serializer = WinSerializer(data=data, partial=True)
         if serializer and serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
@@ -110,7 +110,7 @@ def goal_new(request):
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
         data['date'] = date.today().isoformat()
-        serializer = GoalSerializer(data=data)
+        serializer = GoalSerializer(data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
