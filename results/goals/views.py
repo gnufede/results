@@ -72,32 +72,21 @@ def win_tag(request):
 @csrf_exempt
 def win_new(request):
     """
-    New win.
+    New or update win.
     """
-    if request.method == 'POST':
+    if request.method in ('POST', 'PUT'):
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        data['date'] = date.today().isoformat()
-        serializer = WinSerializer(data=data)
-        if serializer.is_valid():
+        if 'id' in data:
+            win = Win.objects.get(pk=data['id'])
+            serializer = WinSerializer(win,data=data)
+        else:
+            data['date'] = date.today().isoformat()
+            serializer = WinSerializer(data=data)
+        if serializer and serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
-
-
-@csrf_exempt
-def win_update(request):
-    """
-    Update win.
-    """
-    if request.method == 'PUT':
-        data = JSONParser().parse(request)
-        if data['owner'] == request.user.id:
-            serializer = WinSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return JSONResponse(serializer.data, status=201)
-            return JSONResponse(serializer.errors, status=400)
 
 
 @csrf_exempt
