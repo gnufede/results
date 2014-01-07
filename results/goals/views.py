@@ -79,7 +79,11 @@ def win_new(request):
         data['owner'] = request.user.id
         if 'id' in data:
             win = Win.objects.get(pk=data['id'])
-            serializer = WinSerializer(win, data=data, partial=True)
+            if win.owner.id != request.user.id:
+                return JSONResponse(serializer.errors, status=502)
+                #return forbidden!
+            else:
+                serializer = WinSerializer(win, data=data, partial=True)
         else:
             data['date'] = date.today().isoformat()
             serializer = WinSerializer(data=data, partial=True)
@@ -104,14 +108,22 @@ def goal_list(request, weekly=False):
 @csrf_exempt
 def goal_new(request):
     """
-    Create new goal.
+    New goal or update.
     """
-    if request.method == 'POST':
+    if request.method in ('POST', 'PUT'):
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        data['date'] = date.today().isoformat()
-        serializer = GoalSerializer(data=data, partial=True)
-        if serializer.is_valid():
+        if 'id' in data:
+            goal = Goal.objects.get(pk=data['id'])
+            if goal.owner.id != request.user.id:
+                return JSONResponse(serializer.errors, status=502)
+                #return forbidden!
+            else:
+                serializer = GoalSerializer(goal, data=data, partial=True)
+        else:
+            data['date'] = date.today().isoformat()
+            serializer = GoalSerializer(data=data, partial=True)
+        if serializer and serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
