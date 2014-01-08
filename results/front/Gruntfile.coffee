@@ -1,15 +1,11 @@
 module.exports = (grunt) ->
     externalSources = [
-        'app/js/jquery.js',
-        'app/js/lodash.js',
-        'app/js/lazy.js',
-        'app/js/underscore.string.js',
-        'app/js/angular.js',
-        'app/js/angular-route.js',
-        'app/js/angular-sanitize.js',
-        'app/js/angular-animate.js',
-        'app/js/bootstrap.js',
-        'app/js/sha1.js',
+        'bower_components/angular/angular.js',
+        'bower_components/lodash/dist/lodash.js',
+        'bower_components/angular-resource/angular-resource.js',
+        'bower_components/angular-cookies/angular-cookies.js',
+        'bower_components/angular-sanitize/angular-sanitize.js',
+        'bower_components/angular-route/angular-route.js',
     ]
 
     grunt.initConfig({
@@ -17,10 +13,10 @@ module.exports = (grunt) ->
         less: {
             development: {
                 options: {
-                    paths: ['app/less']
+                    paths: ['../static/css']
                 },
                 files: {
-                    "app/less/style.css": "app/less/results-main.less"
+                    "static/css/style.css": "app/less/results-main.less"
                 }
             }
         },
@@ -32,13 +28,13 @@ module.exports = (grunt) ->
             },
 
             libs: {
-                dest: "app/dist/libs.js",
+                dest: "../static/js/libs.js",
                 src: externalSources
             },
 
             app: {
-                dest: "app/dist/app.js",
-                src: ["app/dist/_app.js"]
+                dest: "../static/js/app.js",
+                src: ["../static/js/_app.js"]
             }
         },
 
@@ -46,7 +42,7 @@ module.exports = (grunt) ->
             dev: {
                 options: {join: false},
                 files: {
-                    "app/dist/app.js": [
+                    "../static/js/app.js": [
                         "app/coffee/**/*.coffee"
                         "app/coffee/*.coffee"
                     ]
@@ -55,7 +51,7 @@ module.exports = (grunt) ->
 
             pro: {
                 options: {join: false},
-                files: {"app/dist/_app.js": ["app/coffee/**/*.coffee"]}
+                files: {"../static/js/_app.js": ["app/coffee/**/*.coffee"]}
             }
         },
 
@@ -67,7 +63,7 @@ module.exports = (grunt) ->
             },
 
             libs: {
-                dest: "app/dist/libs.js",
+                dest: "../static/js/libs.js",
                 src: externalSources
             }
         },
@@ -113,7 +109,7 @@ module.exports = (grunt) ->
                     collapseWhitespace: true
                 },
                 files: {
-                    'app/index.html': 'app/index.template.html'
+                    'templates/index.html': 'templates/index.template.html'
                 }
             }
         },

@@ -17,10 +17,10 @@ build
 # Logs:
 *.log
 
-results/static/js/node_modules
-results/static/js/app/dist
-results/static/js/dist
-results/static/js/.tmp
-results/static/js/.sass-cache
-results/static/js/app/bower_components
+results/front/node_modules
+results/front/app/dist
+results/front/dist
+results/front/.tmp
+results/front/.sass-cache
+results/front/bower_components
 
