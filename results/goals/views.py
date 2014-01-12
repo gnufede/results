@@ -80,8 +80,8 @@ def win_new(request):
         if 'id' in data:
             win = Win.objects.get(pk=data['id'])
             if win.owner.id != request.user.id:
-                return JSONResponse(serializer.errors, status=502)
-                #return forbidden!
+                msg = 'You can only modify a win if you are the owner'
+                return JSONResponse(msg, status=403)
             else:
                 serializer = WinSerializer(win, data=data, partial=True)
         else:
@@ -116,8 +116,8 @@ def goal_new(request):
         if 'id' in data:
             goal = Goal.objects.get(pk=data['id'])
             if goal.owner.id != request.user.id:
-                return JSONResponse(serializer.errors, status=502)
-                #return forbidden!
+                msg = 'You can only modify a win if you are the owner'
+                return JSONResponse(msg, status=403)
             else:
                 serializer = GoalSerializer(goal, data=data, partial=True)
         else:
