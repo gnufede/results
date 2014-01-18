@@ -17,11 +17,11 @@ class GoalSerializer(serializers.ModelSerializer):
         model = Goal
         fields = ('id', 'title', 'body', 'date', 'parent', 'tags', 'weekly',
                   'owner')
-        depth = 1
+        #depth = 1
 
 class WinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Win
-        fields = ('id', 'title', 'body', 'date', 'goal', 'tags', 'weekly')
-        #          'owner')
-        depth = 1
+        fields = ('id', 'title', 'body', 'date', 'goal', 'tags', 'weekly',
+                  'owner')
+        #depth = 1

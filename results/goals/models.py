@@ -1,12 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from model_utils.models import TimeStampedModel
 from datetime import date
 
-from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+
 
 @receiver(post_save, sender=get_user_model())
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -51,9 +54,10 @@ class Goal(TimeStampedModel):
             return []
 
     def save(self):
-        if len(Goal.getGoals(user=self.owner, weekly=self.weekly)) > 2:
-            #TODO: raise errors here
-            pass
+        goals = Goal.getGoals(user=self.owner, weekly=self.weekly)
+        if len(goals) > 2:
+            if self.id not in [goal.id for goal in goals]:
+                raise PermissionDenied()
         else:
             if self.weekly:
                 sunday = date.fromordinal(self.date.toordinal()-
@@ -86,13 +90,15 @@ class Win(TimeStampedModel):
         return Win.objects.filter(owner=user, weekly=weekly, date=today)
 
     def save(self):
-        if len(Win.getWins(user=self.owner, weekly=self.weekly)) > 2:
-            #TODO: raise errors here
-            pass
+        self.date = self.date or date.today()
+        wins = Win.getWins(user=self.owner, weekly=self.weekly)
+        if len(wins) > 2:
+            if self.id not in [win.id for win in wins]:
+                raise PermissionDenied()
         else:
             if self.weekly:
                 friday = date.fromordinal((self.date.toordinal()-
-                                        self.date.isoweekday())+5)
+                                    self.date.isoweekday())+5)
                 self.date = friday
             super(Win,self).save()
 
