@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from goals.models import Category, Goal, Win
-from goals.serializers import CategorySerializer, GoalSerializer, WinSerializer
+from goals.serializers import CategorySerializer, GoalSerializer,\
+        WinSerializer, UserSerializer
 from django.contrib.auth.models import User
 
 from rest_framework.response import Response
@@ -25,6 +26,13 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def myself(request):
+    user_info = User.objects.get(pk=request.user.id)
+    user_serializer = UserSerializer(user_info, many=False)
+    return JSONResponse(user_serializer.data)
 
 @api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))

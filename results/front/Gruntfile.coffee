@@ -16,7 +16,7 @@ module.exports = (grunt) ->
                     paths: ['../static/css']
                 },
                 files: {
-                    "static/css/style.css": "app/less/results-main.less"
+                    "../static/css/main.css": "app/less/*/*.less"
                 }
             }
         },
@@ -102,17 +102,17 @@ module.exports = (grunt) ->
             }
         },
 
-        htmlmin: {
-            dist: {
-                options: {
-                    removeComments: true,
-                    collapseWhitespace: true
-                },
-                files: {
-                    'templates/index.html': 'templates/index.template.html'
-                }
-            }
-        },
+        #htmlmin: {
+        #    dist: {
+        #        options: {
+        #            removeComments: true,
+        #            collapseWhitespace: true
+        #        },
+        #        files: {
+        #            'templates/index.html': 'templates/index.template.html'
+        #        }
+        #    }
+        #},
     })
 
     grunt.loadNpmTasks('grunt-contrib-uglify')
@@ -121,21 +121,21 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks('grunt-contrib-watch')
     grunt.loadNpmTasks('grunt-contrib-connect')
     grunt.loadNpmTasks('grunt-contrib-jshint')
-    grunt.loadNpmTasks('grunt-contrib-htmlmin')
+    #grunt.loadNpmTasks('grunt-contrib-htmlmin')
     grunt.loadNpmTasks('grunt-contrib-coffee')
 
     grunt.registerTask('pro', [
         'less',
         'coffee:pro',
         'uglify',
-        'htmlmin',
+    #    'htmlmin',
     ])
 
     grunt.registerTask('dev', [
         'less',
         'coffee:dev',
         'concat:libs',
-        'htmlmin',
+    #    'htmlmin',
     ])
 
     grunt.registerTask('default', [

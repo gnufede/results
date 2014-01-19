@@ -7,10 +7,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='base.html')),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
 
     url(r'^', include('goals.urls')),
-    url(r'^', include('auth.urls')),
     url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
     # Examples:
     # url(r'^$', 'results.views.home', name='home'),

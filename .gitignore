@@ -25,3 +25,5 @@ results/front/.sass-cache
 results/front/bower_components
 
 curl
+results/static/js/app.js
+results/static/js/libs.js

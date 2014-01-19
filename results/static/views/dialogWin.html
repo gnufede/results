@@ -1,0 +1,25 @@
+<div class="veil" style=""></div>
+<div class="back-cloud"></div>
+
+<div class="new-card-dialog" ng-controller="NewWinController">
+    <div class="ribbon">
+        <div class="ribbon-stitches-top"></div>
+        <strong class="ribbon-content">
+            <input ng-model="win.name" type="input" name="name" value=""
+                placeholder="Win's title">
+        </strong>
+        <div class="ribbon-stitches-bottom">
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <textarea ng-model="win.body"
+                class="textarea" type="input" name="body"
+                placeholder="What's your win about?"></textarea>
+        </fieldset>
+        <fieldset>
+            <input class="btn" type="submit" value="Guardar" ng-click="publishWin()">
+            <input class="btn btn-cancel" type="submit" value="Cancelar" ng-click="closeWinButton()">
+        </fieldset>
+    </form>
+</div>

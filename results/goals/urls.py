@@ -10,5 +10,6 @@ urlpatterns = patterns('goals.views',
     url(r'^goals/$', 'goal_list'),
     url(r'^goals/weekly/$', 'goal_list', kwargs={'weekly':True,}),
     url(r'^goals/new/$', 'goal_new'),
-    url(r'^goals/tag/$', 'goal_tag')
+    url(r'^goals/tag/$', 'goal_tag'),
+    url(r'^users/me/$', 'myself')
 )
