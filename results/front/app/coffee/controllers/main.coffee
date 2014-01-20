@@ -45,9 +45,24 @@ MainController = ($scope, resource, $timeout, $routeParams, $location) ->
     $scope.isWelcomeVisible = false
     return
 
+GoalListController = ($scope, $rootScope, resource) ->
+    $scope.addGoal = ()->
+        cb = resource.postGoal($scope.goal)
+        cb.then (response)->
+            $rootScope.goalList.push(response.data)
+        $scope.goal = {}
+        return
 
-ContainerController = ($scope) ->
+    $scope.goal = {}
+    return
+
+ContainerController = ($scope, $rootScope, resource) ->
     $scope.WinName = "First Win"
+    resource.getGoals().then (result) ->
+        $rootScope.goalList = []
+        for goal in result._attrs
+            $rootScope.goalList.push(goal)
+
     return
 
 LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAuth) ->
@@ -62,7 +77,7 @@ LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAut
         $scope.loading = true
 
         onSuccess = (user) ->
-            $gmAuth.setUser(user)
+            $gmAuth.setUser(userGoal)
             $rootScope.auth = user
             $location.url("/")
 
@@ -94,7 +109,8 @@ TooltipController = ($scope, $document)->
 
 module = angular.module("results.controllers.main", [])
 module.controller("MainController", ["$scope","resource", "$timeout", "$routeParams", "$location", MainController])
-module.controller("ContainerController", ["$scope", ContainerController])
+module.controller("ContainerController", ["$scope", "$rootScope", "resource", ContainerController])
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
 module.controller("UserListController", ["$scope","$rootScope", "resource", UserListController])
+module.controller("GoalListController", ["$scope","$rootScope", "resource", GoalListController])
