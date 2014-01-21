@@ -51,9 +51,9 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         "root": "/"
         "login": "/api-token-auth/"
         "logout": "/auth/logout"
-        "wins": "/wins"
-        "goals": "/goals"
-        "users": "/users"
+        "wins": "/wins/"
+        "goals": "/goals/"
+        "users": "/users/"
     }
 
     $gmUrlsProvider.setUrls("api", apiUrls)

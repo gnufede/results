@@ -1,0 +1,19 @@
+<div class="goalslist goal" ng-controller="GoalListController">
+    <h2>Goals</h2>
+    <ul class="content">
+        <li class="" ng-repeat="goal in goalList">
+            <a class="text" ng-href="#/goals/{{ goal.id }}">{{ goal.title }}</a>
+        </li>
+        <li class="pending register">
+            <a>
+                <i class="icon-add2"></i>
+            </a>
+            <a class="input">
+                <input
+                    ng-model="goal.title"
+                    ng-enter="addGoal()"
+                    class="title" placeholder="Name of the goal">
+            </a>
+        </li>
+    </ul>
+</div>
