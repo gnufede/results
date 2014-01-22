@@ -196,7 +196,7 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
         return $http(
             method:'POST'
             headers: headers(false),
-            url: "#{$gmUrls.api("wins")}"
+            url: "#{$gmUrls.api("wins")}new/"
             data: JSON.stringify(data)
         )
 

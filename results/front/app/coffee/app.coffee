@@ -53,7 +53,7 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         "logout": "/auth/logout"
         "wins": "/wins/"
         "goals": "/goals/"
-        "users": "/users/"
+        "users": "/users"
     }
 
     $gmUrlsProvider.setUrls("api", apiUrls)

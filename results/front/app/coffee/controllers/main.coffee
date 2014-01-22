@@ -45,6 +45,17 @@ MainController = ($scope, resource, $timeout, $routeParams, $location) ->
     $scope.isWelcomeVisible = false
     return
 
+WinListController = ($scope, $rootScope, resource) ->
+    $scope.addWin = ()->
+        cb = resource.postWin($scope.win)
+        cb.then (response)->
+            $rootScope.winList.push(response.data)
+        $scope.win = {}
+        return
+
+    $scope.win = {}
+    return
+
 GoalListController = ($scope, $rootScope, resource) ->
     $scope.addGoal = ()->
         cb = resource.postGoal($scope.goal)
@@ -57,12 +68,10 @@ GoalListController = ($scope, $rootScope, resource) ->
     return
 
 ContainerController = ($scope, $rootScope, resource) ->
-    $scope.WinName = "First Win"
     resource.getGoals().then (result) ->
-        $rootScope.goalList = []
-        for goal in result._attrs
-            $rootScope.goalList.push(goal)
-
+        $rootScope.goalList = result
+    resource.getWins().then (result) ->
+        $rootScope.winList = result
     return
 
 LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAuth) ->
@@ -77,7 +86,7 @@ LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAut
         $scope.loading = true
 
         onSuccess = (user) ->
-            $gmAuth.setUser(userGoal)
+            $gmAuth.setUser(user)
             $rootScope.auth = user
             $location.url("/")
 
@@ -114,3 +123,4 @@ module.controller("TooltipController", ["$scope", "$document", TooltipController
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
 module.controller("UserListController", ["$scope","$rootScope", "resource", UserListController])
 module.controller("GoalListController", ["$scope","$rootScope", "resource", GoalListController])
+module.controller("WinListController", ["$scope","$rootScope", "resource", WinListController])
