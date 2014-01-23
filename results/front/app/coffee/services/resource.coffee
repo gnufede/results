@@ -174,12 +174,18 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
     service.createWin = (data) ->
         return $model.create("wins", data)
 
+    # Get a weekly win list
+    service.getWeeklyWins = -> queryMany('weeklywins')
+
     # Get a win list
     service.getWins = -> queryMany('wins')
 
     # Get a win
     service.getWin = (winId) ->
         return queryOne("wins", winId)
+
+    # Get a weekly goal list
+    service.getWeeklyGoals = -> queryMany('weeklygoals')
 
     # Get a goal list
     service.getGoals = -> queryMany('goals')
@@ -191,6 +197,24 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
     # Get a goal
     service.getGoal = (goalId) ->
         return queryOne("goals", goalId)
+
+    service.postWeeklyWin = (data)->
+        data.weekly = true
+        return $http(
+            method:'POST'
+            headers: headers(false),
+            url: "#{$gmUrls.api("wins")}new/"
+            data: JSON.stringify(data)
+        )
+
+    service.postWeeklyGoal = (data)->
+        data.weekly = true
+        return $http(
+            method:'POST'
+            headers: headers(false),
+            url: "#{$gmUrls.api("goals")}new/"
+            data: JSON.stringify(data)
+        )
 
     service.postWin = (data)->
         return $http(

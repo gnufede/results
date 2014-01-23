@@ -53,6 +53,14 @@ WinListController = ($scope, $rootScope, resource) ->
         $scope.win = {}
         return
 
+    $scope.addWeeklyWin = ()->
+        cb = resource.postWeeklyWin($scope.weeklyWin)
+        cb.then (response)->
+            $rootScope.weeklyWinList.push(response.data)
+        $scope.weeklyWin = {}
+        return
+
+    $scope.weeklyWin = {}
     $scope.win = {}
     return
 
@@ -64,10 +72,22 @@ GoalListController = ($scope, $rootScope, resource) ->
         $scope.goal = {}
         return
 
+    $scope.addWeeklyGoal = ()->
+        cb = resource.postWeeklyGoal($scope.weeklyGoal)
+        cb.then (response)->
+            $rootScope.weeklyGoalList.push(response.data)
+        $scope.weeklyGoal = {}
+        return
+
     $scope.goal = {}
+    $scope.weeklyGoal = {}
     return
 
 ContainerController = ($scope, $rootScope, resource) ->
+    resource.getWeeklyGoals().then (result) ->
+        $rootScope.weeklyGoalList = result
+    resource.getWeeklyWins().then (result) ->
+        $rootScope.weeklyWinList = result
     resource.getGoals().then (result) ->
         $rootScope.goalList = result
     resource.getWins().then (result) ->

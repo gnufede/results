@@ -1,19 +1,21 @@
 <div class="winslist win" ng-controller="WinListController">
     <h2>Wins</h2>
-    <ul class="content">
+    <div ng-if="winList.length < 3" class="pending register">
+        <a class="input-append">
+            <input
+                ng-model="win.title"
+                ng-enter="addWin()"
+                type="text"
+                style="width:inherit"
+                class="title" placeholder="Name of the win">
+        </a>
+        <button class="btn">
+            <i class="icon-chevron-right"></i>
+        </button>
+    </div>
+    <ul class="nav navlist bs-docs-sidenav">
         <li ng-repeat="win in winList">
             <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}</a>
-        </li>
-        <li class="pending register">
-            <a>
-                <i class="icon-add2"></i>
-            </a>
-            <a class="input">
-                <input
-                    ng-model="win.title"
-                    ng-enter="addWin()"
-                    class="title" placeholder="Name of the win">
-            </a>
         </li>
     </ul>
 </div>

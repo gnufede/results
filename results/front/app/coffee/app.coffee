@@ -51,6 +51,8 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         "root": "/"
         "login": "/api-token-auth/"
         "logout": "/auth/logout"
+        "weeklywins": "/wins/weekly/"
+        "weeklygoals": "/goals/weekly/"
         "wins": "/wins/"
         "goals": "/goals/"
         "users": "/users"
