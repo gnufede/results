@@ -1,17 +1,11 @@
 <div class="winslist win" ng-controller="WinListController">
     <h2>Wins</h2>
-    <div ng-if="winList.length < 3" class="pending register">
-        <a class="input-append">
-            <input
-                ng-model="win.title"
-                ng-enter="addWin()"
-                type="text"
-                style="width:inherit"
-                class="title" placeholder="Name of the win">
-        </a>
-        <button class="btn">
-            <i class="icon-chevron-right"></i>
-        </button>
+    <div class="input" ng-if="winList.length < 3">
+        <input
+            type="text"
+            ng-model="win.title"
+            ng-enter="addWin()"
+            placeholder="Name of the win">
     </div>
     <ul class="nav navlist bs-docs-sidenav">
         <li ng-repeat="win in winList">
