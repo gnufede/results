@@ -1,19 +1,15 @@
 <div class="goalslist goal" ng-controller="GoalListController">
     <h2>Weekly Goals</h2>
-    <ul class="content">
-        <li class="" ng-repeat="goal in weeklyGoalList">
+    <div class="input" ng-if="weeklyGoalList.length < 3">
+        <input
+            type="text"
+            ng-model="weeklyGoal.title"
+            ng-enter="addWeeklyGoal()"
+            placeholder="Name of the goal">
+    </div>
+    <ul class="nav navlist bs-docs-sidenav">
+        <li ng-repeat="goal in weeklyGoalList">
             <a class="text" ng-href="#/goals/{{ goal.id }}">{{ goal.title }}</a>
-        </li>
-        <li ng-if="weeklyGoalList.length < 3" class="pending register">
-            <a class="input">
-                <input
-                    ng-model="weeklyGoal.title"
-                    ng-enter="addWeeklyGoal()"
-                    class="title" placeholder="Name of the goal">
-            </a>
-            <a>
-                <i class="icon-add"></i>
-            </a>
         </li>
     </ul>
 </div>

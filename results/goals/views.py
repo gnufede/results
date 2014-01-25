@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
+from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from goals.models import Category, Goal, Win
@@ -115,12 +116,12 @@ def win_new(request):
         return JSONResponse(serializer.errors, status=400)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def goal_list(request, weekly=False):
     """
-    List current goals.
+    List current goals, or create a new one
     """
     if request.method == 'GET':
         user = request.user.id
@@ -128,31 +129,50 @@ def goal_list(request, weekly=False):
         serializer = GoalSerializer(goals, many=True)
         return JSONResponse(serializer.data)
 
-
-@api_view(['POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def goal_new(request):
-    """
-    New goal or update.
-    """
-    if request.method in ('POST', 'PUT'):
+    elif request.method == 'POST':
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        if 'id' in data:
-            goal = Goal.objects.get(pk=data['id'])
-            if goal.owner.id != request.user.id:
-                msg = 'You can only modify a win if you are the owner'
-                return JSONResponse(msg, status=403)
-            else:
-                serializer = GoalSerializer(goal, data=data, partial=True)
-        else:
-            data['date'] = date.today().isoformat()
-            serializer = GoalSerializer(data=data, partial=True)
+        data['date'] = date.today().isoformat()
+        serializer = GoalSerializer(data=data, partial=True)
+        if serializer and serializer.is_valid():
+            serializer.save()
+            return JSONResponse(serializer.data, status=status.HTTP_201_CREATED)
+
+    return JSONResponse(serializer.errors, status=400)
+
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def goal_detail(request, pk):
+    """
+    Retrieve, update or delete goal.
+    """
+    try:
+        goal = Goal.objects.get(pk=pk)
+        if goal.owner != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+    except Goal.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = GoalSerializer(goal)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        data['owner'] = request.user.id
+        serializer = GoalSerializer(goal, data=data, partial=True)
         if serializer and serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
-        return JSONResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        goal.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    return JSONResponse(serializer.errors, status=400)
 
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))

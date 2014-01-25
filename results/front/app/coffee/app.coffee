@@ -39,10 +39,10 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         {templateUrl: '/static/views/container.html', controller: "UserListController"})
 
     $routeProvider.when('/goals/:goalId',
-        {templateUrl: '/static/views/container.html', controller: "GoalController"})
+        {templateUrl: '/static/views/container.html', controller: "GoalListController"})
 
     $routeProvider.when('/wins/:winId',
-        {templateUrl: '/static/views/container.html', controller: "WinController"})
+        {templateUrl: '/static/views/container.html', controller: "WinListController"})
 
     $routeProvider.when('/login',
         {templateUrl: '/static/views/login.html', controller:"LoginController"})
@@ -54,7 +54,7 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         "weeklywins": "/wins/weekly/"
         "weeklygoals": "/goals/weekly/"
         "wins": "/wins/"
-        "goals": "/goals/"
+        "goals": "/goals"
         "users": "/users"
     }
 

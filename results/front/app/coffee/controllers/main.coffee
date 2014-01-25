@@ -64,13 +64,18 @@ WinListController = ($scope, $rootScope, resource) ->
     $scope.win = {}
     return
 
-GoalListController = ($scope, $rootScope, resource) ->
+GoalListController = ($scope, $rootScope, $location, $model, resource) ->
     $scope.addGoal = ()->
         cb = resource.postGoal($scope.goal)
         cb.then (response)->
-            $rootScope.goalList.push(response.data)
+            new_goal = $model.make_model("goals",response.data)
+            $rootScope.goalList.push(new_goal)
         $scope.goal = {}
         return
+
+    $scope.deleteGoal = (goal) ->
+        goal.remove().then ->
+                $location.url("/")
 
     $scope.addWeeklyGoal = ()->
         cb = resource.postWeeklyGoal($scope.weeklyGoal)
@@ -142,5 +147,5 @@ module.controller("ContainerController", ["$scope", "$rootScope", "resource", Co
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
 module.controller("UserListController", ["$scope","$rootScope", "resource", UserListController])
-module.controller("GoalListController", ["$scope","$rootScope", "resource", GoalListController])
+module.controller("GoalListController", ["$scope","$rootScope", "$location", "$model", "resource", GoalListController])
 module.controller("WinListController", ["$scope","$rootScope", "resource", WinListController])

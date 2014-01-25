@@ -212,7 +212,7 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
         return $http(
             method:'POST'
             headers: headers(false),
-            url: "#{$gmUrls.api("goals")}new/"
+            url: "#{$gmUrls.api("goals")}"
             data: JSON.stringify(data)
         )
 
@@ -228,7 +228,7 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
         return $http(
             method:'POST'
             headers: headers(false),
-            url: "#{$gmUrls.api("goals")}new/"
+            url: "#{$gmUrls.api("goals")}"
             data: JSON.stringify(data)
         )
 

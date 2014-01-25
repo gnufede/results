@@ -1,19 +1,15 @@
 <div class="winslist win" ng-controller="WinListController">
     <h2>Weekly Wins</h2>
-    <ul class="content">
+    <div class="input" ng-if="weeklyWinList.length < 3">
+        <input
+            type="text"
+            ng-model="weeklyWin.title"
+            ng-enter="addWeeklyWin()"
+            placeholder="Name of the win">
+    </div>
+    <ul class="nav navlist bs-docs-sidenav">
         <li ng-repeat="win in weeklyWinList">
             <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}</a>
-        </li>
-        <li ng-if="weeklyWinList.length < 3" class="pending register">
-            <a class="input">
-                <input
-                    ng-model="weeklyWin.title"
-                    ng-enter="addWeeklyWin()"
-                    class="title" placeholder="Name of the win">
-            </a>
-            <a>
-                <i class="icon-add"></i>
-            </a>
         </li>
     </ul>
 </div>
