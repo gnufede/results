@@ -42,7 +42,10 @@ border: none;
 background: none;
 box-shadow: none;
 padding: 0 0;
-opacity: .25;
+opacity: .1;
+}
+button.btn.btn-mini.littleactions:hover {
+opacity: .85;
 }
 .bs-docs-sidenav .icon-chevron-right {
 float: right;

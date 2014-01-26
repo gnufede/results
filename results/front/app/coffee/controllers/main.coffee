@@ -87,17 +87,18 @@ GoalListController = ($scope, $rootScope, $location, $model, resource) ->
     return
 
 ContainerController = ($scope, $rootScope, $routeParams, resource) ->
-    year =  $routeParams.year or 0;
-    month = $routeParams.month or 0;
-    day = $routeParams.day or 0;
+    $scope.year =  $routeParams.year or 0;
+    $scope.month = $routeParams.month or 0;
+    $scope.day = $routeParams.day or 0;
+    $scope.dateSelected = {}
 
-    resource.getGoals(weekly=true, year=year, month=month, day=day).then (result) ->
+    resource.getGoals(weekly=true, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
         $rootScope.weeklyGoalList = result
-    resource.getWins(weekly=true, year=year, month=month, day=day).then (result) ->
+    resource.getWins(weekly=true, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
         $rootScope.weeklyWinList = result
-    resource.getGoals(weekly=false, year=year, month=month, day=day).then (result) ->
+    resource.getGoals(weekly=false, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
         $rootScope.goalList = result
-    resource.getWins(weekly=false, year=year, month=month, day=day).then (result) ->
+    resource.getWins(weekly=false, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
         $rootScope.winList = result
     return
 
