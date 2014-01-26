@@ -49,9 +49,14 @@ WinListController = ($scope, $rootScope, resource) ->
     $scope.addWin = ()->
         cb = resource.postWin($scope.win)
         cb.then (response)->
-            $rootScope.winList.push(response.data)
+            new_win = $model.make_model("wins",response.data)
+            $rootScope.winList.push(new_win)
         $scope.win = {}
         return
+
+    $scope.deleteWin = (win) ->
+        win.remove().then ->
+                $location.url("/")
 
     $scope.addWeeklyWin = ()->
         cb = resource.postWeeklyWin($scope.weeklyWin)

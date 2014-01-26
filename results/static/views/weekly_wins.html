@@ -9,7 +9,11 @@
     </div>
     <ul class="nav navlist bs-docs-sidenav">
         <li ng-repeat="win in weeklyWinList">
-            <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}</a>
+            <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}
+                <button class="btn btn-mini littleactions pull-right" ng-click="deleteWin(win)">
+                    <i class="icon-remove"></i>
+                </button>
+            </a>
         </li>
     </ul>
 </div>

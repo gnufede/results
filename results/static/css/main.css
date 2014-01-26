@@ -32,3 +32,9 @@
      -moz-border-radius: 6px 6px 6px 6px;
           border-radius: 6px 6px 6px 6px;
 }
+
+button.btn.btn-mini.littleactions {
+border: none;
+background: none;
+box-shadow: none;
+}

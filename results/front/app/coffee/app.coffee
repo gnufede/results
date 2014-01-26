@@ -47,6 +47,8 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
     $routeProvider.when('/login',
         {templateUrl: '/static/views/login.html', controller:"LoginController"})
 
+    $routeProvider.otherwise({redirectTo: '/login'})
+
     apiUrls = {
         "root": "/"
         "login": "/api-token-auth/"
@@ -59,6 +61,29 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
     }
 
     $gmUrlsProvider.setUrls("api", apiUrls)
+
+    defaultHeaders = {
+        "Content-Type": "application/json"
+        "Accept-Language": "en"
+        "X-Host": window.location.hostname
+    }
+
+    $httpProvider.defaults.headers.delete = defaultHeaders
+    $httpProvider.defaults.headers.post = defaultHeaders
+    $httpProvider.defaults.headers.put = defaultHeaders
+    $httpProvider.defaults.headers.get = {
+        "X-Host": window.location.hostname
+    }
+
+    authHttpIntercept = ($q, $location) ->
+        return (promise) ->
+            return promise.then null, (response) ->
+                if response.status == 401 or response.status == 0
+                    $location.url("/login?next=#{$location.path()}")
+                return $q.reject(response)
+
+    $provide.factory("authHttpIntercept", ["$q", "$location", authHttpIntercept])
+    $httpProvider.responseInterceptors.push('authHttpIntercept')
 
     $sceDelegateProvider.resourceUrlWhitelist(['self', 'http://localhost:8000/**'])
 
