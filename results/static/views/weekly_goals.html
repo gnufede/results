@@ -1,10 +1,10 @@
 <div class="goalslist goal" ng-controller="GoalListController">
-    <h2>Weekly Goals</h2>
+    <h4>Goals</h4>
     <div class="input" ng-if="weeklyGoalList.length < 3">
         <input
             type="text"
-            ng-model="weeklyGoal.title"
-            ng-enter="addWeeklyGoal()"
+            ng-model="goal.title"
+            ng-enter="addGoal(weekly=true)"
             placeholder="Name of the goal">
     </div>
     <ul class="nav navlist bs-docs-sidenav">

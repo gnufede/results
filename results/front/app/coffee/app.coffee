@@ -35,6 +35,9 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
     $routeProvider.when('/',
         {templateUrl: '/static/views/container.html', controller: "ContainerController"})
 
+    $routeProvider.when('/:year/:month/:day',
+        {templateUrl: '/static/views/container.html', controller: "ContainerController"})
+
     $routeProvider.when('/users/:userId',
         {templateUrl: '/static/views/container.html', controller: "UserListController"})
 
@@ -53,9 +56,9 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         "root": "/"
         "login": "/api-token-auth/"
         "logout": "/auth/logout"
-        "weeklywins": "/wins/weekly/"
-        "weeklygoals": "/goals/weekly/"
-        "wins": "/wins/"
+#        "weeklywins": "/wins/weekly"
+#        "weeklygoals": "/goals/weekly"
+        "wins": "/wins"
         "goals": "/goals"
         "users": "/users"
     }

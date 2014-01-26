@@ -56,19 +56,39 @@ def category_list(request):
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def win_list(request, weekly=False):
     """
-    List current wins.
+    List current wins, or create a new one
     """
+    weekly_param = request.GET.get('weekly','false')
+    weekly = weekly or weekly_param != 'false'
+    year = int(request.GET.get('year', 0))
+    if year is not 0:
+        month = int(request.GET.get('month', 0))
+        day = int(request.GET.get('day', 0))
+        today = date(year, month, day)
+    else:
+        today = False
+
     if request.method == 'GET':
         user = request.user.id
-        wins = Win.getWins(user=user, weekly=weekly)
+        wins = Win.getWins(user=user, weekly=weekly, day=today)
         serializer = WinSerializer(wins, many=True)
         return JSONResponse(serializer.data)
 
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        data['owner'] = request.user.id
+        data['date'] = today.isoformat() if today else date.today().isoformat()
+        serializer = WinSerializer(data=data, partial=True)
+        if serializer and serializer.is_valid():
+            serializer.save()
+            return JSONResponse(serializer.data, status=status.HTTP_201_CREATED)
+
+    return JSONResponse(serializer.errors, status=400)
 
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))
@@ -89,32 +109,37 @@ def win_tag(request):
         return JSONResponse(win.errors, status=400)
 
 
-@api_view(['POST'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
-def win_new(request):
+def win_detail(request, pk):
     """
-    New or update win.
+    Retrieve, update or delete win.
     """
-    if request.method in ('POST', 'PUT'):
+    try:
+        win = Win.objects.get(pk=pk)
+        if win.owner != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+    except Win.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = WinSerializer(win)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        print(data)
-        if 'id' in data:
-            win = Win.objects.get(pk=data['id'])
-            if win.owner.id != request.user.id:
-                msg = 'You can only modify a win if you are the owner'
-                return JSONResponse(msg, status=403)
-            else:
-                serializer = WinSerializer(win, data=data, partial=True)
-        else:
-            data['date'] = date.today().isoformat()
-            serializer = WinSerializer(data=data, partial=True)
+        serializer = WinSerializer(win, data=data, partial=True)
         if serializer and serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data, status=201)
-        return JSONResponse(serializer.errors, status=400)
 
+    elif request.method == 'DELETE':
+        win.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    return JSONResponse(serializer.errors, status=400)
 
 @api_view(['GET', 'POST'])
 @authentication_classes((TokenAuthentication,))
@@ -123,16 +148,26 @@ def goal_list(request, weekly=False):
     """
     List current goals, or create a new one
     """
+    weekly_param = request.GET.get('weekly','false')
+    weekly = weekly or weekly_param != 'false'
+    year = int(request.GET.get('year', 0))
+    if year is not 0:
+        month = int(request.GET.get('month', 0))
+        day = int(request.GET.get('day', 0))
+        today = date(year, month, day)
+    else:
+        today = False
+
     if request.method == 'GET':
         user = request.user.id
-        goals = Goal.getGoals(user=user, weekly=weekly)
+        goals = Goal.getGoals(user=user, weekly=weekly, day=today)
         serializer = GoalSerializer(goals, many=True)
         return JSONResponse(serializer.data)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        data['date'] = date.today().isoformat()
+        data['date'] = today.isoformat() if today else date.today().isoformat()
         serializer = GoalSerializer(data=data, partial=True)
         if serializer and serializer.is_valid():
             serializer.save()

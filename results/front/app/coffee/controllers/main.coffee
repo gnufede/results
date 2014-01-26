@@ -45,12 +45,15 @@ MainController = ($scope, resource, $timeout, $routeParams, $location) ->
     $scope.isWelcomeVisible = false
     return
 
-WinListController = ($scope, $rootScope, resource) ->
-    $scope.addWin = ()->
-        cb = resource.postWin($scope.win)
+WinListController = ($scope, $rootScope, $location, $model, resource) ->
+    $scope.addWin = (weekly=false)->
+        cb = resource.postWin($scope.win, weekly)
         cb.then (response)->
             new_win = $model.make_model("wins",response.data)
-            $rootScope.winList.push(new_win)
+            if weekly
+                $rootScope.weeklyWinList.push(new_win)
+            else
+                $rootScope.winList.push(new_win)
         $scope.win = {}
         return
 
@@ -58,23 +61,20 @@ WinListController = ($scope, $rootScope, resource) ->
         win.remove().then ->
                 $location.url("/")
 
-    $scope.addWeeklyWin = ()->
-        cb = resource.postWeeklyWin($scope.weeklyWin)
-        cb.then (response)->
-            $rootScope.weeklyWinList.push(response.data)
-        $scope.weeklyWin = {}
-        return
 
     $scope.weeklyWin = {}
     $scope.win = {}
     return
 
 GoalListController = ($scope, $rootScope, $location, $model, resource) ->
-    $scope.addGoal = ()->
-        cb = resource.postGoal($scope.goal)
+    $scope.addGoal = (weekly=false)->
+        cb = resource.postGoal($scope.goal, weekly)
         cb.then (response)->
             new_goal = $model.make_model("goals",response.data)
-            $rootScope.goalList.push(new_goal)
+            if weekly
+                $rootScope.weeklyGoalList.push(new_goal)
+            else
+                $rootScope.goalList.push(new_goal)
         $scope.goal = {}
         return
 
@@ -82,25 +82,22 @@ GoalListController = ($scope, $rootScope, $location, $model, resource) ->
         goal.remove().then ->
                 $location.url("/")
 
-    $scope.addWeeklyGoal = ()->
-        cb = resource.postWeeklyGoal($scope.weeklyGoal)
-        cb.then (response)->
-            $rootScope.weeklyGoalList.push(response.data)
-        $scope.weeklyGoal = {}
-        return
-
     $scope.goal = {}
     $scope.weeklyGoal = {}
     return
 
-ContainerController = ($scope, $rootScope, resource) ->
-    resource.getWeeklyGoals().then (result) ->
+ContainerController = ($scope, $rootScope, $routeParams, resource) ->
+    year =  $routeParams.year or 0;
+    month = $routeParams.month or 0;
+    day = $routeParams.day or 0;
+
+    resource.getGoals(weekly=true, year=year, month=month, day=day).then (result) ->
         $rootScope.weeklyGoalList = result
-    resource.getWeeklyWins().then (result) ->
+    resource.getWins(weekly=true, year=year, month=month, day=day).then (result) ->
         $rootScope.weeklyWinList = result
-    resource.getGoals().then (result) ->
+    resource.getGoals(weekly=false, year=year, month=month, day=day).then (result) ->
         $rootScope.goalList = result
-    resource.getWins().then (result) ->
+    resource.getWins(weekly=false, year=year, month=month, day=day).then (result) ->
         $rootScope.winList = result
     return
 
@@ -148,9 +145,9 @@ TooltipController = ($scope, $document)->
 
 module = angular.module("results.controllers.main", [])
 module.controller("MainController", ["$scope","resource", "$timeout", "$routeParams", "$location", MainController])
-module.controller("ContainerController", ["$scope", "$rootScope", "resource", ContainerController])
+module.controller("ContainerController", ["$scope", "$rootScope", "$routeParams", "resource", ContainerController])
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
 module.controller("UserListController", ["$scope","$rootScope", "resource", UserListController])
 module.controller("GoalListController", ["$scope","$rootScope", "$location", "$model", "resource", GoalListController])
-module.controller("WinListController", ["$scope","$rootScope", "resource", WinListController])
+module.controller("WinListController", ["$scope","$rootScope", "$location", "$model", "resource", WinListController])

@@ -174,21 +174,19 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
     service.createWin = (data) ->
         return $model.create("wins", data)
 
-    # Get a weekly win list
-    service.getWeeklyWins = -> queryMany('weeklywins')
-
     # Get a win list
-    service.getWins = -> queryMany('wins')
+    service.getWins = (weekly=false, year=0, month=0, day=0)-> 
+        params = {year:year, month:month, day:day, weekly:weekly}
+        queryMany('wins',params)
 
     # Get a win
     service.getWin = (winId) ->
         return queryOne("wins", winId)
 
-    # Get a weekly goal list
-    service.getWeeklyGoals = -> queryMany('weeklygoals')
-
     # Get a goal list
-    service.getGoals = -> queryMany('goals')
+    service.getGoals = (weekly=false, year=0, month=0, day=0)-> 
+        params = {year:year, month:month, day:day, weekly:weekly}
+        queryMany('goals', params)
 
     # Create a goal
     service.createGoal = (data) ->
@@ -198,33 +196,17 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
     service.getGoal = (goalId) ->
         return queryOne("goals", goalId)
 
-    service.postWeeklyWin = (data)->
-        data.weekly = true
+    service.postWin = (data, weekly=false)->
+        data.weekly = weekly
         return $http(
             method:'POST'
             headers: headers(false),
-            url: "#{$gmUrls.api("wins")}new/"
+            url: "#{$gmUrls.api("wins")}"
             data: JSON.stringify(data)
         )
 
-    service.postWeeklyGoal = (data)->
-        data.weekly = true
-        return $http(
-            method:'POST'
-            headers: headers(false),
-            url: "#{$gmUrls.api("goals")}"
-            data: JSON.stringify(data)
-        )
-
-    service.postWin = (data)->
-        return $http(
-            method:'POST'
-            headers: headers(false),
-            url: "#{$gmUrls.api("wins")}new/"
-            data: JSON.stringify(data)
-        )
-
-    service.postGoal = (data)->
+    service.postGoal = (data, weekly=false)->
+        data.weekly = weekly
         return $http(
             method:'POST'
             headers: headers(false),

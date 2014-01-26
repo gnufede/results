@@ -1,5 +1,5 @@
 .bs-docs-sidenav {
-  width: 228px;
+  width: 220px;
 /*  margin: 30px 0 0; */
   padding: 0;
   background-color: #fff;
@@ -14,8 +14,12 @@
   display: block;
   width: 190px \9;
   margin: 0 0 -1px;
-  padding: 8px 14px;
+  padding: 8px 10px;
   border: 1px solid #e5e5e5;
+}
+.bs-docs-sidenav > li.active > a {
+  background-color: #07a;
+  color: #fff;
 }
 .bs-docs-sidenav > li:first-child > a {
   -webkit-border-radius: 6px 6px 0 0;
@@ -37,4 +41,9 @@ button.btn.btn-mini.littleactions {
 border: none;
 background: none;
 box-shadow: none;
+padding: 0 0;
+}
+
+.btn-mini [class^="icon-"], .btn-mini [class*=" icon-"]{
+margin-top: 1px;
 }

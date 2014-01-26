@@ -1,17 +1,17 @@
 <div class="winslist win" ng-controller="WinListController">
-    <h2>Weekly Wins</h2>
+    <h4>Wins</h4>
     <div class="input" ng-if="weeklyWinList.length < 3">
         <input
             type="text"
-            ng-model="weeklyWin.title"
-            ng-enter="addWeeklyWin()"
+            ng-model="win.title"
+            ng-enter="addWin(weekly=true)"
             placeholder="Name of the win">
     </div>
     <ul class="nav navlist bs-docs-sidenav">
-        <li ng-repeat="win in weeklyWinList">
+        <li ng-repeat="win in weeklyWinList" class="active">
             <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}
                 <button class="btn btn-mini littleactions pull-right" ng-click="deleteWin(win)">
-                    <i class="icon-remove"></i>
+                    <i class="icon-remove icon-white"></i>
                 </button>
             </a>
         </li>
