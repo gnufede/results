@@ -9,7 +9,8 @@
     </div>
     <ul class="nav navlist bs-docs-sidenav">
         <li class="" ng-repeat="goal in goalList">
-            <a class="text" ng-href="#/goals/{{ goal.id }}">{{ goal.title }}
+            <a class="text" ng-href="#/goals/{{ goal.id }}">
+                {{ goal.title }}
                 <button class="btn btn-mini littleactions pull-right" ng-click="deleteGoal(goal)">
                     <i class="icon-remove"></i>
                 </button>
