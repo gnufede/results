@@ -1,8 +1,9 @@
 <div class="winslist win" ng-controller="WinListController">
     <h4>Wins</h4>
-    <div class="input" ng-if="weeklyWinList.length < 3">
+    <div class="input-group" ng-if="weeklyWinList.length < 3">
         <input
             type="text"
+            class="form-control goalin"
             ng-model="win.title"
             ng-enter="addWin(weekly=true)"
             placeholder="Name of the win">
@@ -10,9 +11,7 @@
     <ul class="nav navlist bs-docs-sidenav">
         <li ng-repeat="win in weeklyWinList" class="active">
             <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}
-                <button class="btn btn-mini littleactions pull-right" ng-click="deleteWin(win)">
-                    <i class="icon-remove icon-white"></i>
-                </button>
+                <button type="button" style="color:white;" class="close" ng-click="deleteWin(win)" aria-hidden="true">&times;</button>
             </a>
         </li>
     </ul>

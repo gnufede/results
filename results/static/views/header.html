@@ -1,28 +1,27 @@
 <div class="background"></div>
 <div class="content">
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="st-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Results</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
+          </button>
+          <a class="navbar-brand" href="#">Results</a>
+        </div>
+            <ul class="nav navbar-nav nav-collapse">
               <li class="active"><a href="#">Home</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
-            <ul class="nav pull-right">
-              <li> <a class="user dropdown-toggle sr-only" data-toggle="dropdown" id="dropdownMenu1" >{{ user.username }}</a>
+            <ul class="nav navbar-nav navbar-right">
+              <li> <a class="user dropdown-toggle navbar-right" data-toggle="dropdown" id="dropdownMenu1" >{{ user.username }}</a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="logout()"><i class="icon-cancel"></i>Logout</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
-        </div>
       </div>
     </div>
 

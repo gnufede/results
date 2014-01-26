@@ -7,9 +7,11 @@
 </div-->
 <div class="row-fluid">
 <div class="span3">
-    <div class="control-group input-append">
-      <input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
-      <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+    <div class="input-group control-group input-append">
+      <input type="text" class="form-control" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default" data-toggle="datepicker"><span class="glyphicon glyphicon-calendar"></span></button>
+        </div>
     </div>
 </div>
 

@@ -56,3 +56,15 @@ margin-right: -6px;
 .btn-mini [class^="icon-"], .btn-mini [class*=" icon-"]{
 margin-top: 1px;
 }
+
+.input-group{
+border-radius: 6px;
+}
+.input-group > input.goalin{
+width: 220px;
+border-radius: 6px;
+min-height: 38px;
+}
+.input-group .form-control:only-child{
+border-radius: 6px;
+}

@@ -1,8 +1,9 @@
 <div class="goalslist goal" ng-controller="GoalListController">
     <h4>Goals</h4>
-    <div class="input" ng-if="weeklyGoalList.length < 3">
+    <div class="input-group" ng-if="weeklyGoalList.length < 3">
         <input
             type="text"
+            class="form-control goalin"
             ng-model="goal.title"
             ng-enter="addGoal(weekly=true)"
             placeholder="Name of the goal">
@@ -10,9 +11,7 @@
     <ul class="nav navlist bs-docs-sidenav">
         <li ng-repeat="goal in weeklyGoalList">
             <a class="text" ng-href="#/goals/{{ goal.id }}">{{ goal.title }}
-                <button class="btn btn-mini littleactions pull-right" ng-click="deleteGoal(goal)">
-                    <i class="icon-remove"></i>
-                </button>
+                <button type="button" class="close" ng-click="deleteGoal(goal)" aria-hidden="true">&times;</button>
             </a>
 
         </li>
