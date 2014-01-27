@@ -3,24 +3,28 @@
 /*  margin: 30px 0 0; */
   padding: 0;
   background-color: #fff;
-  -webkit-border-radius: 6px;
+/*  -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
   -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
      -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
           box-shadow: 0 1px 4px rgba(0,0,0,.065);
+*/
 }
-.bs-docs-sidenav > li > a {
+.bs-docs-sidenav > li > a,
+.bs-docs-sidenav > li > input
+{
   display: block;
   width: 190px \9;
   margin: 0 0 -1px;
   padding: 8px 10px;
-  border: 1px solid #e5e5e5;
+/*  border: 1px solid #e5e5e5; */
 }
 .bs-docs-sidenav > li.active > a {
   background-color: #08c;
   color: #fff;
 }
+/*
 .bs-docs-sidenav > li:first-child > a {
   -webkit-border-radius: 6px 6px 0 0;
      -moz-border-radius: 6px 6px 0 0;
@@ -36,15 +40,23 @@
      -moz-border-radius: 6px 6px 6px 6px;
           border-radius: 6px 6px 6px 6px;
 }
+*/
 
 button.btn.btn-mini.littleactions {
 border: none;
 background: none;
 box-shadow: none;
 padding: 0 0;
-opacity: .1;
+opacity: 0.00;
 }
-button.btn.btn-mini.littleactions:hover {
+button.close{
+opacity: 0.00;
+}
+.nav>li>a:hover>button.close, .nav>li>a:focus>button.close{
+opacity: .3;
+}
+
+.nav>li>a:hover>button.close:hover, .nav>li>a:focus>button.close:hover {
 opacity: .85;
 }
 .bs-docs-sidenav .icon-chevron-right {
@@ -56,15 +68,35 @@ margin-right: -6px;
 .btn-mini [class^="icon-"], .btn-mini [class*=" icon-"]{
 margin-top: 1px;
 }
-
+.fa.small{
+font-size: 8pt;
+}
+/*
 .input-group{
 border-radius: 6px;
 }
-.input-group > input.goalin{
-width: 220px;
-border-radius: 6px;
-min-height: 38px;
-}
+
 .input-group .form-control:only-child{
 border-radius: 6px;
+}
+*/
+input.input-small,
+.input-group > input.goalin{
+width: 220px;
+/*border-radius: 6px;*/
+min-height: 38px;
+border-width: 0;
+box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px inset;
+}
+input.input-small:focus,
+.input-group > input.goalin:focus{
+box-shadow: rgba(0, 0, 0, 0.0945098) 0px 2px 2px 0px inset;
+}
+
+.calendarr > table > thead > tr > th > button.btn.btn-default,
+.calendarr > table > tbody > tr > td > button.btn.btn-default{
+    border-color: rgba(0,0,0,0);
+}
+.calendarr > table > tbody > tr > td > button.btn.btn-info{
+    background-color: #08c;
 }

@@ -82,7 +82,8 @@ def win_list(request, weekly=False):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        data['date'] = today.isoformat() if today else date.today().isoformat()
+        if not data['date']:
+            data['date'] = today.isoformat() if today else date.today().isoformat()
         serializer = WinSerializer(data=data, partial=True)
         if serializer and serializer.is_valid():
             serializer.save()
@@ -167,7 +168,8 @@ def goal_list(request, weekly=False):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         data['owner'] = request.user.id
-        data['date'] = today.isoformat() if today else date.today().isoformat()
+        if not data['date']:
+            data['date'] = today.isoformat() if today else date.today().isoformat()
         serializer = GoalSerializer(data=data, partial=True)
         if serializer and serializer.is_valid():
             serializer.save()

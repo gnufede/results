@@ -1,22 +1,24 @@
 <div class="header">
 </div>
 
-<div class="login swing">
+<div class="row">
+<div class="col-md-2 col-md-offset-5 login swing">
     <div class="parachute ">
     </div>
-    <div class="form">
-        <form ng-submit="submit()">
+    <div class="form input-group center-block">
+        <form ng-submit="submit()" role="form">
             <fieldset>
-                <input type="text" ng-model="form.username" class="input-small" placeholder="Username" id="inputUsername">
+                <input type="text" ng-model="form.username" class="input-small form-control" placeholder="Username" id="inputUsername">
             </fieldset>
             <fieldset>
-                <input type="password" ng-model="form.password" class="input-small" placeholder="Password" id="inputPassword">
+                <input type="password" ng-model="form.password" class="input-small form-control" placeholder="Password" id="inputPassword">
             </fieldset>
             <fieldset>
-                <button class="btn" type="submit">Login</button>
+                <button class="btn btn-primary btn-lg btn-block" type="submit" style="border-radius:0;">Login</button>
             </fieldset>
         </form>
     </div>
+</div>
 </div>
 
 <div class="footer">

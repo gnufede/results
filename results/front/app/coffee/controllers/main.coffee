@@ -1,4 +1,30 @@
-MainController = ($scope, resource, $timeout, $routeParams, $location) ->
+MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $location) ->
+    $rootScope.year =  $routeParams.year or 0
+    $rootScope.month = $routeParams.month or 0
+    $rootScope.day = $routeParams.day or 0
+
+    $scope.$watch('dt', () ->
+        if $scope.dt
+            $rootScope.year =  $scope.dt.getFullYear()
+            $rootScope.month = $scope.dt.getMonth()+1
+            $rootScope.day = $scope.dt.getDate()
+            $location.url("/"+$rootScope.year+'/'+$rootScope.month+'/'+$rootScope.day)
+        return
+    )
+
+    $scope.getGoalsAndWins = () ->
+        resource.getGoals(weekly=true, year=$rootScope.year, month=$rootScope.month, day=$rootScope.day).then (result) ->
+            $rootScope.weeklyGoalList = result
+        resource.getWins(weekly=true, year=$rootScope.year, month=$rootScope.month, day=$rootScope.day).then (result) ->
+            $rootScope.weeklyWinList = result
+        resource.getGoals(weekly=false, year=$rootScope.year, month=$rootScope.month, day=$rootScope.day).then (result) ->
+            $rootScope.goalList = result
+        resource.getWins(weekly=false, year=$rootScope.year, month=$rootScope.month, day=$rootScope.day).then (result) ->
+            $rootScope.winList = result
+        return
+
+    $scope.getGoalsAndWins()
+
     onUserSuccess = (result) ->
         $scope.user = result
 
@@ -19,10 +45,6 @@ MainController = ($scope, resource, $timeout, $routeParams, $location) ->
     $scope.closeGoalButton = ()->
         $scope.showGoalDialog = false
 
-    $scope.$on("new-Win", (data)->
-        $scope.showWinDialog = false
-    )
-
     $scope.isFlashWarnVisible = false
     $scope.isFlashErrorVisible = false
     $scope.isFlashSuccessVisible = false
@@ -41,8 +63,51 @@ MainController = ($scope, resource, $timeout, $routeParams, $location) ->
         $timeout(hideFlash, 2000)
     )
 
-    $scope.isGoalPlaceHolderVisible = false
-    $scope.isWelcomeVisible = false
+    $scope.today = () ->
+        $scope.dt = new Date()
+        return
+
+    if $rootScope.year==0
+        $scope.today();
+    else
+        $scope.dt = new Date($rootScope.year+'-'+$rootScope.month+'-'+$rootScope.day)
+
+#    $scope.$watch('dt', () ->
+#        #alert($scope.dt)
+#        $rootScope.year =  $scope.dt.getFullYear()
+#        $rootScope.month = $scope.dt.getMonth()+1
+#        $rootScope.day = $scope.dt.getDate()
+#        $location.url("/"+$rootScope.year+'/'+$rootScope.month+'/'+$rootScope.day)
+#        return
+#    )
+
+    $scope.showWeeks = false
+    $scope.toggleWeeks =  () ->
+        $scope.showWeeks = ! $scope.showWeeks
+        return
+    $scope.clear =  () ->
+        $scope.dt = null
+        return
+#    $scope.disabled = (date, mode) -> 
+#        ( mode == 'day' && ( date.getDay() == 0 || date.getDay() == 6 ) )
+#    $scope.toggleMin = () ->
+#        $scope.minDate = ( $scope.minDate ) ? null : new Date()
+#        return
+#    $scope.toggleMin();
+    $scope.open = ($event) ->
+        $event.preventDefault()
+        $event.stopPropagation()
+        return
+    $scope.opened = true
+
+    $scope.dateOptions = 
+        'year-format': "'yy'",
+        'starting-day': 1
+
+    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate']
+    $scope.format = $scope.formats[1]
+    return
+
     return
 
 WinListController = ($scope, $rootScope, $location, $model, resource) ->
@@ -59,8 +124,7 @@ WinListController = ($scope, $rootScope, $location, $model, resource) ->
 
     $scope.deleteWin = (win) ->
         win.remove().then ->
-                $location.url("/")
-
+                $scope.getGoalsAndWins()
 
     $scope.weeklyWin = {}
     $scope.win = {}
@@ -68,6 +132,7 @@ WinListController = ($scope, $rootScope, $location, $model, resource) ->
 
 GoalListController = ($scope, $rootScope, $location, $model, resource) ->
     $scope.addGoal = (weekly=false)->
+        $scope.goal.date = $rootScope.year+'-'+$rootScope.month+'-'+$rootScope.day
         cb = resource.postGoal($scope.goal, weekly)
         cb.then (response)->
             new_goal = $model.make_model("goals",response.data)
@@ -80,27 +145,13 @@ GoalListController = ($scope, $rootScope, $location, $model, resource) ->
 
     $scope.deleteGoal = (goal) ->
         goal.remove().then ->
-                $location.url("/")
+                $scope.getGoalsAndWins()
+                #$location.url("/")
 
     $scope.goal = {}
     $scope.weeklyGoal = {}
     return
 
-ContainerController = ($scope, $rootScope, $routeParams, resource) ->
-    $scope.year =  $routeParams.year or 0;
-    $scope.month = $routeParams.month or 0;
-    $scope.day = $routeParams.day or 0;
-    $scope.dateSelected = {}
-
-    resource.getGoals(weekly=true, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
-        $rootScope.weeklyGoalList = result
-    resource.getWins(weekly=true, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
-        $rootScope.weeklyWinList = result
-    resource.getGoals(weekly=false, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
-        $rootScope.goalList = result
-    resource.getWins(weekly=false, year=$scope.year, month=$scope.month, day=$scope.day).then (result) ->
-        $rootScope.winList = result
-    return
 
 LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAuth) ->
     $rootScope.pageTitle = 'Login'
@@ -145,8 +196,9 @@ TooltipController = ($scope, $document)->
 
 
 module = angular.module("results.controllers.main", [])
-module.controller("MainController", ["$scope","resource", "$timeout", "$routeParams", "$location", MainController])
-module.controller("ContainerController", ["$scope", "$rootScope", "$routeParams", "resource", ContainerController])
+#module.controller("DateCtrl", ["$scope", "$rootScope", "$routeParams", "$location", "resource", DateCtrl])
+module.controller("MainController", ["$scope", "$rootScope","resource", "$timeout", "$routeParams", "$location", MainController])
+#module.controller("ContainerController", ["$scope", "$rootScope", "$routeParams", "resource", ContainerController])
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
 module.controller("UserListController", ["$scope","$rootScope", "resource", UserListController])

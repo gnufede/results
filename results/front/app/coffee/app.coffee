@@ -14,6 +14,8 @@ modules = [
     "results.services.resource",
     "results.services.common",
     "results.services.model",
+    # Directives
+#    "results.directives.calendar",
 
     # Modules
     "mrKeypress",
@@ -25,7 +27,8 @@ modules = [
     "gmStorage",
     "gmConfirm",
     "gmOverlay",
-    "i18next"
+    "i18next",
+    "ui.bootstrap",
 ]
 
 configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $compileProvider, $gmUrlsProvider, $sceDelegateProvider)->
@@ -33,10 +36,10 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
     # $locationProvider.html5Mode(true)
 
     $routeProvider.when('/',
-        {templateUrl: '/static/views/container.html', controller: "ContainerController"})
+        {templateUrl: '/static/views/container.html', controller: "MainController"})
 
     $routeProvider.when('/:year/:month/:day',
-        {templateUrl: '/static/views/container.html', controller: "ContainerController"})
+        {templateUrl: '/static/views/container.html', controller: "MainController"})
 
     $routeProvider.when('/users/:userId',
         {templateUrl: '/static/views/container.html', controller: "UserListController"})

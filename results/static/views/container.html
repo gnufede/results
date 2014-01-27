@@ -6,23 +6,26 @@
     <a class="btn" ng-click="addWinButton()">Add a win</a>
 </div-->
 <div class="row-fluid">
-<div class="span3">
-    <div class="input-group control-group input-append">
-      <input type="text" class="form-control" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
-      <div class="input-group-btn">
-        <button type="button" class="btn btn-default" data-toggle="datepicker"><span class="glyphicon glyphicon-calendar"></span></button>
-        </div>
-    </div>
+    <div class="span4">
+    <div style="display:inline-block; min-height:290px;">
+      <div class="calendarr" ng-model="dt">
+          <datepicker min="minDate" show-weeks="showWeeks"></datepicker>
+      </div>
+   </div>
 </div>
 
 <div class="span3">
 <h3>This Week</h3>
-<section class="right-col" ng-include="'/static/views/weekly_goals.html'"></section>
-<section class="right-col" ng-include="'/static/views/weekly_wins.html'"></section>
+    <div class="rectangle">
+        <section class="right-col" ng-include="'/static/views/weekly_goals.html'"></section>
+        <section class="right-col" ng-include="'/static/views/weekly_wins.html'"></section>
+    </div>
 </div>
 <div class="span3">
 <h3>Today</h3>
-<section class="left-col" ng-include="'/static/views/goals.html'"></section>
-<section class="left-col" ng-include="'/static/views/wins.html'"></section>
+    <div class="rectangle">
+        <section class="left-col" ng-include="'/static/views/goals.html'"></section>
+        <section class="left-col" ng-include="'/static/views/wins.html'"></section>
+    </div>
 </div>
 </div>

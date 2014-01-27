@@ -54,7 +54,7 @@ class Goal(TimeStampedModel):
             return []
 
     def save(self):
-        goals = Goal.getGoals(user=self.owner, weekly=self.weekly)
+        goals = Goal.getGoals(user=self.owner, weekly=self.weekly, day=self.date)
         if len(goals) > 2:
             if self.id not in [goal.id for goal in goals]:
                 raise PermissionDenied()
@@ -91,7 +91,7 @@ class Win(TimeStampedModel):
 
     def save(self):
         self.date = self.date or date.today()
-        wins = Win.getWins(user=self.owner, weekly=self.weekly)
+        wins = Win.getWins(user=self.owner, weekly=self.weekly, day=self.date)
         if len(wins) > 2:
             if self.id not in [win.id for win in wins]:
                 raise PermissionDenied()

@@ -1,18 +1,19 @@
 <div class="winslist win" ng-controller="WinListController">
-    <h4>Wins</h4>
+    <ul class="nav navlist bs-docs-sidenav">
+        <li ng-repeat="win in weeklyWinList" class="active">
+            <a class="text">
+                <i class="fa fa-trophy fa-fw"></i>
+                {{ win.title }}
+                <button type="button" style="color:white;" class="close" ng-click="deleteWin(win)" aria-hidden="true">&times;</button>
+            </a>
+        </li>
+    </ul>
     <div class="input-group" ng-if="weeklyWinList.length < 3">
         <input
             type="text"
             class="form-control goalin"
             ng-model="win.title"
             ng-enter="addWin(weekly=true)"
-            placeholder="Name of the win">
+            placeholder="Win">
     </div>
-    <ul class="nav navlist bs-docs-sidenav">
-        <li ng-repeat="win in weeklyWinList" class="active">
-            <a class="text" ng-href="#/wins/{{ win.id }}">{{ win.title }}
-                <button type="button" style="color:white;" class="close" ng-click="deleteWin(win)" aria-hidden="true">&times;</button>
-            </a>
-        </li>
-    </ul>
 </div>

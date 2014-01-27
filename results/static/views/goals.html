@@ -1,19 +1,19 @@
 <div class="goalslist goal" ng-controller="GoalListController">
-    <h4>Goals</h4>
-    <div class="input-group" ng-if="goalList.length < 3">
-        <input
-            type="text"
-            class="form-control goalin"
-            ng-model="goal.title"
-            ng-enter="addGoal()"
-            placeholder="Name of the goal">
-    </div>
     <ul class="nav navlist bs-docs-sidenav">
         <li class="" ng-repeat="goal in goalList">
-            <a class="text" ng-href="#/goals/{{ goal.id }}">
+            <a class="text">
+                <i class="fa fa-chevron-right fa-fw"></i>
                 {{ goal.title }}
                 <button type="button" class="close" ng-click="deleteGoal(goal)" aria-hidden="true">&times;</button>
             </a>
         </li>
     </ul>
+    <div class="input-group" ng-if="goalList.length < 3">
+        <input id="goalin" 
+            type="text"
+            class="form-control goalin"
+            ng-model="goal.title"
+            ng-enter="addGoal()"
+            placeholder="Goal">
+    </div>
 </div>
