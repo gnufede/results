@@ -6,26 +6,27 @@
     <a class="btn" ng-click="addWinButton()">Add a win</a>
 </div-->
 <div class="row-fluid">
-    <div class="span4">
-    <div style="display:inline-block; min-height:290px;">
-      <div class="calendarr" ng-model="dt">
-          <datepicker min="minDate" show-weeks="showWeeks"></datepicker>
-      </div>
-   </div>
-</div>
-
-<div class="span3">
-<h3>This Week</h3>
-    <div class="rectangle">
-        <section class="right-col" ng-include="'/static/views/weekly_goals.html'"></section>
-        <section class="right-col" ng-include="'/static/views/weekly_wins.html'"></section>
-    </div>
-</div>
-<div class="span3">
+<div class="span4">
 <h3>Today</h3>
     <div class="rectangle">
         <section class="left-col" ng-include="'/static/views/goals.html'"></section>
         <section class="left-col" ng-include="'/static/views/wins.html'"></section>
     </div>
 </div>
+<div class="span4">
+<h3>This Week</h3>
+    <div class="rectangle">
+        <section class="right-col" ng-include="'/static/views/weekly_goals.html'"></section>
+        <section class="right-col" ng-include="'/static/views/weekly_wins.html'"></section>
+    </div>
+</div>
+    <div class="span4">
+    <div class="pull-right" style="margin-top:20px; display:inline-block; min-height:290px;">
+      <div class="pull-right calendarr" ng-model="dt">
+          <datepicker min="minDate" show-weeks="showWeeks"></datepicker>
+          <button style="margin-top:20px;" class="btn btn-default btn-block" ng-click="today()">Today</button>
+      </div>
+   </div>
+   </div>
+
 </div>

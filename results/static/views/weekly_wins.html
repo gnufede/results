@@ -1,10 +1,10 @@
 <div class="winslist win" ng-controller="WinListController">
     <ul class="nav navlist bs-docs-sidenav">
-        <li ng-repeat="win in weeklyWinList" class="active">
+        <li ng-repeat="win in weeklyWinList" >
             <a class="text">
-                <i class="fa fa-trophy fa-fw"></i>
+                <i class="fa fa-trophy fa-lg fa-fw"></i>
                 {{ win.title }}
-                <button type="button" style="color:white;" class="close" ng-click="deleteWin(win)" aria-hidden="true">&times;</button>
+                <button type="button" class="close" ng-click="deleteWin(win)" aria-hidden="true">&times;</button>
             </a>
         </li>
     </ul>
