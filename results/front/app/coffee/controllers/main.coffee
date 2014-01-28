@@ -12,6 +12,14 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
         return
     )
 
+    onUserSuccess = (result) ->
+        $scope.user = result
+
+    onUserError = (result)->
+        $location.url("/login")
+
+    resource.getUser("me").then(onUserSuccess, onUserError)
+
     $scope.getGoalsAndWins = () ->
         resource.getGoals(weekly=true, year=$rootScope.year, month=$rootScope.month, day=$rootScope.day).then (result) ->
             $rootScope.weeklyGoalList = result
@@ -24,14 +32,6 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
         return
 
     $scope.getGoalsAndWins()
-
-    onUserSuccess = (result) ->
-        $scope.user = result
-
-    onUserError = (result)->
-        $location.url("/login")
-
-    resource.getUser("me").then(onUserSuccess, onUserError)
 
     $scope.addWinButton = ()->
         $scope.showWinDialog = true
@@ -72,15 +72,6 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
     else
         $scope.dt = new Date($rootScope.year+'-'+$rootScope.month+'-'+$rootScope.day)
 
-#    $scope.$watch('dt', () ->
-#        #alert($scope.dt)
-#        $rootScope.year =  $scope.dt.getFullYear()
-#        $rootScope.month = $scope.dt.getMonth()+1
-#        $rootScope.day = $scope.dt.getDate()
-#        $location.url("/"+$rootScope.year+'/'+$rootScope.month+'/'+$rootScope.day)
-#        return
-#    )
-
     $scope.showWeeks = false
     $scope.toggleWeeks =  () ->
         $scope.showWeeks = ! $scope.showWeeks
@@ -90,10 +81,6 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
         return
 #    $scope.disabled = (date, mode) -> 
 #        ( mode == 'day' && ( date.getDay() == 0 || date.getDay() == 6 ) )
-#    $scope.toggleMin = () ->
-#        $scope.minDate = ( $scope.minDate ) ? null : new Date()
-#        return
-#    $scope.toggleMin();
     $scope.open = ($event) ->
         $event.preventDefault()
         $event.stopPropagation()
@@ -108,10 +95,9 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
     $scope.format = $scope.formats[1]
     return
 
-    return
-
 WinListController = ($scope, $rootScope, $location, $model, resource) ->
     $scope.addWin = (weekly=false)->
+        $scope.win.date = $rootScope.year+'-'+$rootScope.month+'-'+$rootScope.day
         cb = resource.postWin($scope.win, weekly)
         cb.then (response)->
             new_win = $model.make_model("wins",response.data)
@@ -180,11 +166,6 @@ LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAut
 
     return
 
-UserListController = ($scope, $rootScope, resource) ->
-    $scope.user = {}
-
-    return
-
 
 TooltipController = ($scope, $document)->
     $scope.isTooltipVisible = false
@@ -201,6 +182,5 @@ module.controller("MainController", ["$scope", "$rootScope","resource", "$timeou
 #module.controller("ContainerController", ["$scope", "$rootScope", "$routeParams", "resource", ContainerController])
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
-module.controller("UserListController", ["$scope","$rootScope", "resource", UserListController])
 module.controller("GoalListController", ["$scope","$rootScope", "$location", "$model", "resource", GoalListController])
 module.controller("WinListController", ["$scope","$rootScope", "$location", "$model", "resource", WinListController])

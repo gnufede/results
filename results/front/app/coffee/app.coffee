@@ -74,6 +74,8 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         "X-Host": window.location.hostname
     }
 
+    #$httpProvider.defaults.cache = true;
+
     $httpProvider.defaults.headers.delete = defaultHeaders
     $httpProvider.defaults.headers.post = defaultHeaders
     $httpProvider.defaults.headers.put = defaultHeaders

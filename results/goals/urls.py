@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('goals.views',
-    url(r'^users/me/$', 'myself'),
+    url(r'^users/me$', 'myself'),
     url(r'^categories$', 'category_list'),
     url(r'^wins$', 'win_list'),
     url(r'^wins/(?P<pk>[0-9]+)$', 'win_detail'),
