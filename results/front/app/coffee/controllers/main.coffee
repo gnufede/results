@@ -1,4 +1,14 @@
 MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $location) ->
+    onUserSuccess = (result) ->
+        $scope.user = result
+        if $routeParams.year
+            $scope.getGoalsAndWins()
+
+    onUserError = (result)->
+        $location.url("/login")
+
+    resource.getUser("me").then(onUserSuccess, onUserError)
+        
     $rootScope.year =  $routeParams.year or 0
     $rootScope.month = $routeParams.month or 0
     $rootScope.day = $routeParams.day or 0
@@ -12,14 +22,6 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
         return
     )
 
-    onUserSuccess = (result) ->
-        $scope.user = result
-
-    onUserError = (result)->
-        $location.url("/login")
-
-    resource.getUser("me").then(onUserSuccess, onUserError)
-
     $scope.getGoalsAndWins = () ->
         resource.getGoals(weekly=true, year=$rootScope.year, month=$rootScope.month, day=$rootScope.day).then (result) ->
             $rootScope.weeklyGoalList = result
@@ -31,7 +33,6 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
             $rootScope.winList = result
         return
 
-    $scope.getGoalsAndWins()
 
     $scope.addWinButton = ()->
         $scope.showWinDialog = true
@@ -138,6 +139,34 @@ GoalListController = ($scope, $rootScope, $location, $model, resource) ->
     $scope.weeklyGoal = {}
     return
 
+PublicRegisterController = ($scope, $rootScope, $location, resource, $gmAuth) ->
+    $rootScope.pageTitle = 'Signup'
+    $rootScope.pageSection = 'signup'
+    $scope.form = {"type": "public"}
+
+    $scope.$watch "site.data.public_register", (value) ->
+        if value == false
+            $location.url("/login")
+
+    $scope.submit = ->
+        username = $scope.form.username
+        email = $scope.form.email
+        password = $scope.form.password
+
+        $scope.loading = true
+
+        onSuccess = (user) ->
+            $location.url("/login")
+
+        onError = (data) ->
+            $scope.error = true
+            $scope.errorMessage = data.detail
+
+        promise = resource.register(username, email, password)
+        promise = promise.then(onSuccess, onError)
+
+    return
+
 
 LoginController = ($scope, $rootScope, $location, $routeParams, resource, $gmAuth) ->
     $rootScope.pageTitle = 'Login'
@@ -184,3 +213,4 @@ module.controller("TooltipController", ["$scope", "$document", TooltipController
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
 module.controller("GoalListController", ["$scope","$rootScope", "$location", "$model", "resource", GoalListController])
 module.controller("WinListController", ["$scope","$rootScope", "$location", "$model", "resource", WinListController])
+module.controller("PublicRegisterController", ["$scope", "$rootScope", "$location", "resource", "$gmAuth", PublicRegisterController])

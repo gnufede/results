@@ -33,12 +33,17 @@
       templateUrl: '/static/views/login.html',
       controller: "LoginController"
     });
+    $routeProvider.when('/signup', {
+      templateUrl: '/static/views/signup.html',
+      controller: "PublicRegisterController"
+    });
     $routeProvider.otherwise({
       redirectTo: '/login'
     });
     apiUrls = {
       "root": "/",
       "login": "/api-token-auth/",
+      "signup": "/api-token-register/",
       "logout": "/auth/logout",
       "wins": "/wins",
       "goals": "/goals",
@@ -130,7 +135,7 @@
 
   PublicRegisterController = function($scope, $rootScope, $location, rs, $data, $gmAuth, $i18next) {
     $rootScope.pageTitle = $i18next.t('register.register');
-    $rootScope.pageSection = 'login';
+    $rootScope.pageSection = 'signup';
     $scope.form = {
       "type": "public"
     };
@@ -140,17 +145,20 @@
       }
     });
     $scope.submit = function() {
-      var form, promise;
-      form = _.clone($scope.form);
-      promise = rs.register(form);
-      promise.then(function(user) {
-        $gmAuth.setUser(user);
-        $rootScope.auth = user;
-        return $location.url("/");
-      });
-      return promise.then(null, function(data) {
-        return $scope.checksleyErrors = data;
-      });
+      var email, onError, onSuccess, password, promise, userame;
+      userame = $scope.form.username;
+      email = $scope.form.email;
+      password = $scope.form.password;
+      $scope.loading = true;
+      onSuccess = function(user) {
+        return $location.url("/login");
+      };
+      onError = function(data) {
+        $scope.error = true;
+        return $scope.errorMessage = data.detail;
+      };
+      promise = rs.register(username, email, password);
+      return promise = promise.then(onSuccess, onError);
     };
   };
 
@@ -163,10 +171,20 @@
 }).call(this);
 
 (function() {
-  var GoalListController, LoginController, MainController, TooltipController, WinListController, module;
+  var GoalListController, LoginController, MainController, PublicRegisterController, TooltipController, WinListController, module;
 
   MainController = function($scope, $rootScope, resource, $timeout, $routeParams, $location) {
     var onUserError, onUserSuccess;
+    onUserSuccess = function(result) {
+      $scope.user = result;
+      if ($routeParams.year) {
+        return $scope.getGoalsAndWins();
+      }
+    };
+    onUserError = function(result) {
+      return $location.url("/login");
+    };
+    resource.getUser("me").then(onUserSuccess, onUserError);
     $rootScope.year = $routeParams.year || 0;
     $rootScope.month = $routeParams.month || 0;
     $rootScope.day = $routeParams.day || 0;
@@ -178,13 +196,6 @@
         $location.url("/" + $rootScope.year + '/' + $rootScope.month + '/' + $rootScope.day);
       }
     });
-    onUserSuccess = function(result) {
-      return $scope.user = result;
-    };
-    onUserError = function(result) {
-      return $location.url("/login");
-    };
-    resource.getUser("me").then(onUserSuccess, onUserError);
     $scope.getGoalsAndWins = function() {
       var day, month, weekly, year;
       resource.getGoals(weekly = true, year = $rootScope.year, month = $rootScope.month, day = $rootScope.day).then(function(result) {
@@ -200,7 +211,6 @@
         return $rootScope.winList = result;
       });
     };
-    $scope.getGoalsAndWins();
     $scope.addWinButton = function() {
       return $scope.showWinDialog = true;
     };
@@ -319,6 +329,35 @@
     $scope.weeklyGoal = {};
   };
 
+  PublicRegisterController = function($scope, $rootScope, $location, resource, $gmAuth) {
+    $rootScope.pageTitle = 'Signup';
+    $rootScope.pageSection = 'signup';
+    $scope.form = {
+      "type": "public"
+    };
+    $scope.$watch("site.data.public_register", function(value) {
+      if (value === false) {
+        return $location.url("/login");
+      }
+    });
+    $scope.submit = function() {
+      var email, onError, onSuccess, password, promise, username;
+      username = $scope.form.username;
+      email = $scope.form.email;
+      password = $scope.form.password;
+      $scope.loading = true;
+      onSuccess = function(user) {
+        return $location.url("/login");
+      };
+      onError = function(data) {
+        $scope.error = true;
+        return $scope.errorMessage = data.detail;
+      };
+      promise = resource.register(username, email, password);
+      return promise = promise.then(onSuccess, onError);
+    };
+  };
+
   LoginController = function($scope, $rootScope, $location, $routeParams, resource, $gmAuth) {
     $rootScope.pageTitle = 'Login';
     $rootScope.pageSection = 'login';
@@ -366,6 +405,8 @@
   module.controller("GoalListController", ["$scope", "$rootScope", "$location", "$model", "resource", GoalListController]);
 
   module.controller("WinListController", ["$scope", "$rootScope", "$location", "$model", "resource", WinListController]);
+
+  module.controller("PublicRegisterController", ["$scope", "$rootScope", "$location", "resource", "$gmAuth", PublicRegisterController]);
 
 }).call(this);
 
@@ -1230,6 +1271,32 @@
       promise.error(function(data, status) {
         return defered.reject();
       });
+      return defered.promise;
+    };
+    service.register = function(username, email, password) {
+      var defered, onError, onSuccess, postData, promise;
+      defered = $q.defer();
+      onSuccess = function(data, status) {
+        var user;
+        $gmStorage.set("token", data["auth_token"]);
+        user = $model.make_model("users", data);
+        return defered.resolve(user);
+      };
+      onError = function(data, status) {
+        return defered.reject(data);
+      };
+      postData = {
+        "username": username,
+        "email": email,
+        "password": password
+      };
+      promise = $http({
+        method: 'POST',
+        url: $gmUrls.api('signup'),
+        data: JSON.stringify(postData)
+      });
+      promise.success(onSuccess);
+      promise.error(onError);
       return defered.promise;
     };
     service.login = function(username, password) {

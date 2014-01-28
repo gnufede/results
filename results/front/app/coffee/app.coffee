@@ -53,11 +53,15 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
     $routeProvider.when('/login',
         {templateUrl: '/static/views/login.html', controller:"LoginController"})
 
+    $routeProvider.when('/signup',
+        {templateUrl: '/static/views/signup.html', controller:"PublicRegisterController"})
+
     $routeProvider.otherwise({redirectTo: '/login'})
 
     apiUrls = {
         "root": "/"
         "login": "/api-token-auth/"
+        "signup": "/api-token-register/"
         "logout": "/auth/logout"
 #        "weeklywins": "/wins/weekly"
 #        "weeklygoals": "/goals/weekly"

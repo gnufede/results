@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
     url(r'^', include('goals.urls')),
     url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
+    url(r'^api-token-register/', 'goals.views.create_auth'),
     # Examples:
     # url(r'^$', 'results.views.home', name='home'),
     # url(r'^results/', include('results.foo.urls')),

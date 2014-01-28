@@ -122,23 +122,28 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
 
         return defered.promise
 
-#    # Resource Methods
-#    service.register = (formdata) ->
-#        defered = $q.defer()
-#
-#        onSuccess = (data, status) ->
-#            $gmStorage.set("token", data["auth_token"])
-#            user = $model.make_model("users", data)
-#            defered.resolve(user)
-#
-#        onError = (data, status) ->
-#            defered.reject(data)
-#
-#        promise = $http({method:'POST', url: $gmUrls.api('auth-register'), data: JSON.stringify(formdata)})
-#        promise.success(onSuccess)
-#        promise.error(onError)
-#
-#        return defered.promise
+    # Resource Methods
+    service.register = (username, email, password) ->
+        defered = $q.defer()
+
+        onSuccess = (data, status) ->
+            $gmStorage.set("token", data["auth_token"])
+            user = $model.make_model("users", data)
+            defered.resolve(user)
+
+        onError = (data, status) ->
+            defered.reject(data)
+
+        postData =
+            "username": username
+            "email": email
+            "password": password
+            
+        promise = $http({method:'POST', url: $gmUrls.api('signup'), data: JSON.stringify(postData)})
+        promise.success(onSuccess)
+        promise.error(onError)
+
+        return defered.promise
 
     # Login request
     service.login = (username, password) ->

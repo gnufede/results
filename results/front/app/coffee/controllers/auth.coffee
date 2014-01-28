@@ -46,7 +46,7 @@ LoginController = ($scope, $rootScope, $location, $routeParams, rs, $gmAuth, $i1
 
 PublicRegisterController = ($scope, $rootScope, $location, rs, $data, $gmAuth, $i18next) ->
     $rootScope.pageTitle = $i18next.t('register.register')
-    $rootScope.pageSection = 'login'
+    $rootScope.pageSection = 'signup'
     $scope.form = {"type": "public"}
 
     $scope.$watch "site.data.public_register", (value) ->
@@ -54,16 +54,21 @@ PublicRegisterController = ($scope, $rootScope, $location, rs, $data, $gmAuth, $
             $location.url("/login")
 
     $scope.submit = ->
-        form = _.clone($scope.form)
+        userame = $scope.form.username
+        email = $scope.form.email
+        password = $scope.form.password
 
-        promise = rs.register(form)
-        promise.then (user) ->
-            $gmAuth.setUser(user)
-            $rootScope.auth = user
-            $location.url("/")
+        $scope.loading = true
 
-        promise.then null, (data) ->
-            $scope.checksleyErrors = data
+        onSuccess = (user) ->
+            $location.url("/login")
+
+        onError = (data) ->
+            $scope.error = true
+            $scope.errorMessage = data.detail
+
+        promise = rs.register(username, email, password)
+        promise = promise.then(onSuccess, onError)
 
     return
 
