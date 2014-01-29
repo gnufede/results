@@ -78,7 +78,10 @@ def win_list(request, weekly=False):
     """
     weekly_param = request.GET.get('weekly','false')
     weekly = weekly or weekly_param != 'false'
-    year = int(request.GET.get('year', 0))
+    try:
+        year = int(request.GET.get('year', 0))
+    except ValueError as e:
+        year = 0
     if year is not 0:
         month = int(request.GET.get('month', 0))
         day = int(request.GET.get('day', 0))
@@ -164,7 +167,10 @@ def goal_list(request, weekly=False):
     """
     weekly_param = request.GET.get('weekly','false')
     weekly = weekly or weekly_param != 'false'
-    year = int(request.GET.get('year', 0))
+    try:
+        year = int(request.GET.get('year', 0))
+    except ValueError as e:
+        year = 0
     if year is not 0:
         month = int(request.GET.get('month', 0))
         day = int(request.GET.get('day', 0))
