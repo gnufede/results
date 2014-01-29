@@ -253,6 +253,7 @@
     } else {
       $scope.dt = new Date($rootScope.year + '-' + $rootScope.month + '-' + $rootScope.day);
     }
+    $scope.startingDay = 1;
     $scope.showWeeks = false;
     $scope.toggleWeeks = function() {
       $scope.showWeeks = !$scope.showWeeks;
@@ -265,10 +266,6 @@
       $event.stopPropagation();
     };
     $scope.opened = true;
-    $scope.dateOptions = {
-      'year-format': "'yy'",
-      'starting-day': 1
-    };
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
     $scope.format = $scope.formats[1];
   };
