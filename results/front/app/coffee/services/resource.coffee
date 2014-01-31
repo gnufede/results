@@ -210,6 +210,15 @@ ResourceProvider = ($http, $q, $gmStorage, $gmUrls, $model, config) ->
             data: JSON.stringify(data)
         )
 
+    service.updateGoal = (data)->
+        data.weekly = weekly
+        return $http(
+            method:'PUT'
+            headers: headers(false),
+            url: "#{$gmUrls.api("goals")}"
+            data: JSON.stringify(data)
+        )
+
     service.postGoal = (data, weekly=false)->
         data.weekly = weekly
         return $http(

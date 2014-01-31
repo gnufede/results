@@ -93,6 +93,16 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
     $scope.format = $scope.formats[1]
     return
 
+GoalController = ($scope, $rootScope, $location, $routeParams, $model, resource) ->
+    $scope.goal = resource.getGoal($routeParams.goal)
+    $scope.showGoalDialog = true
+
+    $scope.updateGoal = (goal) ->
+        resource.updateGoal(goal).then ->
+            $scope.showGoalDialog = false
+        return
+
+
 WinListController = ($scope, $rootScope, $location, $model, resource) ->
     $scope.addWin = (weekly=false)->
         $scope.win.date = $rootScope.year+'-'+$rootScope.month+'-'+$rootScope.day
@@ -208,6 +218,7 @@ module.controller("MainController", ["$scope", "$rootScope","resource", "$timeou
 #module.controller("ContainerController", ["$scope", "$rootScope", "$routeParams", "resource", ContainerController])
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
+module.controller("GoalController", ["$scope","$rootScope","$location", "$routeParams", "$model", "resource", GoalController]) ->
 module.controller("GoalListController", ["$scope","$rootScope", "$location", "$model", "resource", GoalListController])
 module.controller("WinListController", ["$scope","$rootScope", "$location", "$model", "resource", WinListController])
 module.controller("PublicRegisterController", ["$scope", "$rootScope", "$location", "resource", "$gmAuth", PublicRegisterController])
