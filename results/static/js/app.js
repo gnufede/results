@@ -23,7 +23,7 @@
     });
     $routeProvider.when('/goals/:goalId', {
       templateUrl: '/static/views/container.html',
-      controller: "GoalListController"
+      controller: "GoalController"
     });
     $routeProvider.when('/wins/:winId', {
       templateUrl: '/static/views/container.html',
@@ -171,7 +171,7 @@
 }).call(this);
 
 (function() {
-  var GoalListController, LoginController, MainController, PublicRegisterController, TooltipController, WinListController, module;
+  var GoalController, GoalListController, LoginController, MainController, PublicRegisterController, TooltipController, WinListController, module;
 
   MainController = function($scope, $rootScope, resource, $timeout, $routeParams, $location) {
     var onUserError, onUserSuccess;
@@ -268,6 +268,16 @@
     $scope.opened = true;
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
     $scope.format = $scope.formats[1];
+  };
+
+  GoalController = function($scope, $rootScope, $location, $routeParams, $model, resource) {
+    $scope.goal = resource.getGoal($routeParams.goalId);
+    $scope.showGoalDialog = true;
+    return $scope.updateGoal = function(goal) {
+      resource.updateGoal(goal).then(function() {
+        return $scope.showGoalDialog = false;
+      });
+    };
   };
 
   WinListController = function($scope, $rootScope, $location, $model, resource) {
@@ -398,6 +408,8 @@
   module.controller("TooltipController", ["$scope", "$document", TooltipController]);
 
   module.controller("LoginController", ["$scope", "$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController]);
+
+  module.controller("GoalController", ["$scope", "$rootScope", "$location", "$routeParams", "$model", "resource", GoalController]);
 
   module.controller("GoalListController", ["$scope", "$rootScope", "$location", "$model", "resource", GoalListController]);
 
@@ -1391,6 +1403,15 @@
         method: 'POST',
         headers: headers(false),
         url: "" + ($gmUrls.api("wins")),
+        data: JSON.stringify(data)
+      });
+    };
+    service.updateGoal = function(data) {
+      data.weekly = weekly;
+      return $http({
+        method: 'PUT',
+        headers: headers(false),
+        url: "" + ($gmUrls.api("goals")),
         data: JSON.stringify(data)
       });
     };

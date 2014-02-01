@@ -45,7 +45,7 @@ configCallback = ($routeProvider, $locationProvider, $httpProvider, $provide, $c
         {templateUrl: '/static/views/container.html', controller: "UserListController"})
 
     $routeProvider.when('/goals/:goalId',
-        {templateUrl: '/static/views/container.html', controller: "GoalListController"})
+        {templateUrl: '/static/views/container.html', controller: "GoalController"})
 
     $routeProvider.when('/wins/:winId',
         {templateUrl: '/static/views/container.html', controller: "WinListController"})
