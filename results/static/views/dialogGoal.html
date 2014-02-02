@@ -1,11 +1,11 @@
 <div class="veil" style=""></div>
 <div class="back-cloud"></div>
 
-<div class="new-card-dialog" ng-controller="NewGoalController">
+<div class="new-card-dialog" ng-controller="GoalController">
     <div class="ribbon">
         <div class="ribbon-stitches-top"></div>
         <strong class="ribbon-content">
-            <input ng-model="goal.name" type="input" name="name" value=""
+            <input ng-model="goal.title" type="input" name="name" value=""
                 placeholder="Goal's title">
         </strong>
         <div class="ribbon-stitches-bottom">
@@ -18,7 +18,7 @@
                 placeholder="What's your goal about?"></textarea>
         </fieldset>
         <fieldset>
-            <input class="btn" type="submit" value="Guardar" ng-click="publishGoal()">
+            <input class="btn" type="submit" value="Guardar" ng-click="updateGoal()">
             <input class="btn btn-cancel" type="submit" value="Cancelar" ng-click="closeGoalButton()">
         </fieldset>
     </form>

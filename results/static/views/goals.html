@@ -1,7 +1,7 @@
 <div class="goalslist goal" ng-controller="GoalListController">
     <ul class="nav navlist bs-docs-sidenav">
         <li class="" ng-repeat="goal in goalList">
-            <a class="text" >
+            <a class="text" href="#/goals/{{ goal.id }}">
                 <i class="fa fa-chevron-right fa-lg fa-fw"></i>
                 {{ goal.title }}
                 <button type="button" class="close" ng-click="deleteGoal(goal)" aria-hidden="true">&times;</button>
