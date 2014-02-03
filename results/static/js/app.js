@@ -270,12 +270,19 @@
     $scope.format = $scope.formats[1];
   };
 
-  GoalController = function($scope, $rootScope, $location, $routeParams, $model, resource) {
+  GoalController = function($scope, $rootScope, $location, $routeParams, $model, $modal, resource) {
     $scope.goal = resource.getGoal($routeParams.goalId);
     $scope.showGoalDialog = true;
-    return $scope.updateGoal = function(goal) {
+    $scope.updateGoal = function(goal) {
       resource.updateGoal(goal).then(function() {
         return $scope.showGoalDialog = false;
+      });
+    };
+    return $scope.open = function() {
+      var modalInstance;
+      return modalInstance = $modal.open({
+        templateUrl: 'myModalContent.html',
+        controller: 'GoalController'
       });
     };
   };

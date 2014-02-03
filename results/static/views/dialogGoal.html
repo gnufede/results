@@ -2,19 +2,14 @@
 <div class="back-cloud"></div>
 
 <div class="new-card-dialog" ng-controller="GoalController">
-    <div class="ribbon">
-        <div class="ribbon-stitches-top"></div>
-        <strong class="ribbon-content">
-            <input ng-model="goal.title" type="input" name="name" value=""
+    <script type="text/ng-template" id="myModalContent.html">
+    <form role="form">
+            <input ng-model="goal.title" type="input" name="name" class="form-control"
+                value=""
                 placeholder="Goal's title">
-        </strong>
-        <div class="ribbon-stitches-bottom">
-        </div>
-    </div>
-    <form>
         <fieldset>
             <textarea ng-model="goal.body"
-                class="textarea" type="input" name="body"
+                class="textarea form-control" type="input" name="body"
                 placeholder="What's your goal about?"></textarea>
         </fieldset>
         <fieldset>

@@ -93,7 +93,7 @@ MainController = ($scope, $rootScope, resource, $timeout, $routeParams, $locatio
     $scope.format = $scope.formats[1]
     return
 
-GoalController = ($scope, $rootScope, $location, $routeParams, $model, resource) ->
+GoalController = ($scope, $rootScope, $location, $routeParams, $model, $modal, resource) ->
     $scope.goal = resource.getGoal($routeParams.goalId)
     $scope.showGoalDialog = true
 
@@ -101,6 +101,12 @@ GoalController = ($scope, $rootScope, $location, $routeParams, $model, resource)
         resource.updateGoal(goal).then ->
             $scope.showGoalDialog = false
         return
+
+    $scope.open = () ->
+        modalInstance = $modal.open(
+            templateUrl: 'myModalContent.html'
+            controller: 'GoalController'
+        )
 
 
 WinListController = ($scope, $rootScope, $location, $model, resource) ->
