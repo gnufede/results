@@ -251,7 +251,7 @@
     if ($rootScope.year === 0) {
       $scope.today();
     } else {
-      $scope.dt = new Date($rootScope.year + '-' + $rootScope.month + '-' + $rootScope.day);
+      $scope.dt = new Date($rootScope.year, $rootScope.month - 1, $rootScope.day);
     }
     $scope.startingDay = 1;
     $scope.showWeeks = false;
