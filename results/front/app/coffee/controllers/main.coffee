@@ -224,7 +224,7 @@ module.controller("MainController", ["$scope", "$rootScope","resource", "$timeou
 #module.controller("ContainerController", ["$scope", "$rootScope", "$routeParams", "resource", ContainerController])
 module.controller("TooltipController", ["$scope", "$document", TooltipController])
 module.controller("LoginController", ["$scope","$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController])
-module.controller("GoalController", ["$scope","$rootScope","$location", "$routeParams", "$model", "resource", GoalController]) 
+module.controller("GoalController", ["$scope","$rootScope","$location", "$routeParams", "$model", "$modal", "resource", GoalController]) 
 module.controller("GoalListController", ["$scope","$rootScope", "$location", "$model", "resource", GoalListController])
 module.controller("WinListController", ["$scope","$rootScope", "$location", "$model", "resource", WinListController])
 module.controller("PublicRegisterController", ["$scope", "$rootScope", "$location", "resource", "$gmAuth", PublicRegisterController])
