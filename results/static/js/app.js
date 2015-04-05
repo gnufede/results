@@ -416,7 +416,7 @@
 
   module.controller("LoginController", ["$scope", "$rootScope", "$location", "$routeParams", "resource", "$gmAuth", LoginController]);
 
-  module.controller("GoalController", ["$scope", "$rootScope", "$location", "$routeParams", "$model", "resource", GoalController]);
+  module.controller("GoalController", ["$scope", "$rootScope", "$location", "$routeParams", "$model", "$modal", "resource", GoalController]);
 
   module.controller("GoalListController", ["$scope", "$rootScope", "$location", "$model", "resource", GoalListController]);
 
