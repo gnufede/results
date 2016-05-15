@@ -33,6 +33,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'results.settings.production'
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
+import django
+django.setup()
+
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
 
