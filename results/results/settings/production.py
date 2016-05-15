@@ -1,9 +1,6 @@
 """Production settings and globals."""
 
-import environ
-root = environ.Path(__file__) - 3 # three folder back (/a/b/c/ - 3 = /)
-env = environ.Env(DEBUG=(bool, False),) # set default values and casting
-environ.Env.read_env() # reading .env file
+import dj_database_url
 
 from os import environ
 
@@ -54,9 +51,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
 ########## DATABASE CONFIGURATION
-DATABASES = {
-    'default': env.db()  # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
-}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 ########## END DATABASE CONFIGURATION
 
 
