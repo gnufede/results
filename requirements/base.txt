@@ -1,6 +1,6 @@
-Django
+Django==1.7
 djangorestframework
 #django-braces==1.2.2
-django-model-utils
+django-model-utils==2.4
 #logutils==0.3.3
 South==0.8.4
