@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db import models
@@ -11,7 +10,7 @@ from datetime import date
 from rest_framework.authtoken.models import Token
 
 
-@receiver(post_save, sender=get_user_model())
+@receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         token = Token.objects.create(user=instance)
