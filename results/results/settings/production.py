@@ -22,6 +22,9 @@ def get_env_setting(setting):
 ########## HOST CONFIGURATION
 # See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production
 ALLOWED_HOSTS = []
+# retrieve first ip address for use in dokku deployments
+import socket
+ALLOWED_HOSTS.append(socket.getaddrinfo(socket.gethostname(), 'http')[0][4][0])
 ########## END HOST CONFIGURATION
 
 ########## EMAIL CONFIGURATION
