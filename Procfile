@@ -1,1 +1,1 @@
-web: gunicorn results.results.wsgi
+web: gunicorn --pythonpath results results.wsgi
